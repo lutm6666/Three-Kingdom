@@ -10,7 +10,7 @@ android {
         applicationId = "com.openai.threekingdoms"
         minSdk = 23
         targetSdk = 37
-        versionCode = 23
-        versionName = "2.3.0"
+        versionCode = 24
+        versionName = "2.4.0"
     }
 }

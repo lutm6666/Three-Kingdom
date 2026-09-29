@@ -241,7 +241,7 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
 
     private void showHome() {
         prepareRoot();
-        addTitle("三國志拼圖大戰重建", "v2.3 原作美術資源整合");
+        addTitle("三國志拼圖大戰重建", "v2.4 原作立繪身份驗證");
 
         boolean hasOriginalArt = addOptionalArt(
                 OriginalArtData.BACKGROUND_RESOURCE,
@@ -315,7 +315,7 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
         prepareRoot();
         addTitle(
                 "原作美術圖庫",
-                "原 APK 角色立繪／未映射素材以 Asset ID 顯示");
+                "16 張立繪／3 張 HIGH 身份映射");
 
         addOptionalArt(
                 OriginalArtData.BACKGROUND_RESOURCE,
@@ -325,23 +325,27 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
         root.addView(text(
                 "目前已整合："
                         + OriginalArtData.CHARACTER_ART.length
-                        + " 張完整角色立繪。"
-                        + " 角色身份尚未有可靠對照的素材不會強行命名。",
+                        + " 張完整角色立繪；其中 "
+                        + OriginalArtData.verifiedCount()
+                        + " 張已達 HIGH 身份驗證。其餘素材仍維持 UNVERIFIED。",
                 14f,
                 Color.rgb(160, 220, 255)));
 
         root.addView(text(
-                "來源：你先前保存的《三國志拼圖大戰》原版 APK。"
-                        + " 目前先以原始 Asset ID 保留可追溯性。",
+                "HIGH 標準：原 APK master key 直接命中 Asset stem，"
+                        + "並由獨立公開圖鑑來源確認 card No.／身份。"
+                        + " 未達此標準者不命名。",
                 13f,
                 Color.rgb(255, 196, 96)));
 
         for (OriginalArtData.Entry entry
                 : OriginalArtData.CHARACTER_ART) {
             TextView label = text(
-                    "Asset：" + entry.assetId,
+                    entry.verifiedLabel(),
                     15f,
-                    Color.WHITE);
+                    entry.isHighConfidence()
+                            ? Color.rgb(120, 230, 150)
+                            : Color.WHITE);
             label.setGravity(Gravity.CENTER_HORIZONTAL);
             root.addView(label);
 

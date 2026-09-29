@@ -3,7 +3,7 @@
 Offline Android reconstruction/research project inspired by the discontinued
 《三國志拼圖大戰 / 三国志パズル大戦》.
 
-Current app version: **v2.3.0**.
+Current app version: **v2.4.0**.
 
 ## Current scope
 

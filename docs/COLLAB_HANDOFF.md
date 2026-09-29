@@ -2,9 +2,10 @@
 
 ## Current production baseline
 
-- Android app: v2.3.0
+- Android app: v2.4.0
 - package: `com.openai.threekingdoms`
 - current source of truth: `app/src/main/java/com/openai/threekingdoms/`
+- art mapping production file: `app/src/main/java/com/openai/threekingdoms/OriginalArtData.java`
 - original art is optional/local and not committed
 
 ## Research → integration gate
@@ -17,7 +18,11 @@
 
 ## Current priority
 
-Resolve the 16 `ch_*_l` asset IDs in `OriginalArtData.java`
-against original character/card/master identifiers.
+Three of 16 `ch_*_l` asset IDs are now HIGH-confidence and integrated:
+- `ch_15200025_l` → No.102 → 〖大斧〗徐晃
+- `ch_35300032_l` → No.260 → 于禁
+- `ch_56400035_l` → No.350 → 成公英
+
+Resolve the remaining 13 against original character/card/master identifiers.
 
 Appearance-based guesses are explicitly insufficient.
