@@ -42,3 +42,42 @@ Sources:
   cards, since 261 and 351 are the awakened forms.
 - The candidate names have not been checked against the current Java data, and no
   Java was changed. Integration needs the reviewed step from `COLLAB_HANDOFF.md`.
+
+## Second independent pass (Claude Code, 2026-09-30)
+
+This pass was run after the three mappings were already integrated in `343d35f`.
+It deliberately avoided `p.rakda3.net` and used a second, separately run fan wiki:
+三国志パズル大戦 攻略Wiki【さんぱず攻略】 on Gamerch (`https://gamerch.com/sanpuzz/`).
+Card numbers came from its faction lists (魏 `629752`, 群 `630042`) and its
+No.1-500 index (`631024`); stats came from each card page.
+
+| card_no | Gamerch page | name | Lv1 HP/ATK/heal | max HP/ATK/heal | max Lv | skill / leader skill | vs master |
+|---|---|---|---|---|---|---|---|
+| 102 | [630116](https://gamerch.com/sanpuzz/630116) | 【大斧】徐晃 | 170/86/5 | 1040/269/21 | 25 | 不敗の名将 / 斥候展開 | all equal; skill 990002 + leader 990101 both present |
+| 260 | [630152](https://gamerch.com/sanpuzz/630152) | 于禁 | 145/96/31 | 290/192/62 | 20 | none / none | all equal; skill and leader both empty |
+| 350 | [634526](https://gamerch.com/sanpuzz/634526) | 成公英 | 142/159/43 | 256/334/86 | 15 | 流麗な策 / none | all equal; skill 990001 present, leader empty |
+
+Result: all three confirmed. HIGH stands.
+
+What this pass adds over the first:
+- A second independent card-number → identity source.
+- Max-level stats for No.260 and No.350 now match the master (the first pass could
+  only check Lv1).
+- Skill presence lines up with the master: a card has a skill / leader skill on
+  Gamerch exactly when the master row has a `skill_id` / `leader_skill_id`.
+  Skill IDs themselves still cannot be mapped to names.
+
+Discrepancy found:
+- No.350's awakened form. The first pass recorded "awakens to No.351". Gamerch lists
+  the awakened 【西涼忠臣】成公英 as No.365 (群 list, `630042`).
+  The `variant` column now names the awakened card instead of a number. This does
+  not affect the No.350 identity.
+
+Caveats still open:
+- `assets/data/master.json` is still not in the repo, so the stem = master_key check
+  still relies on `MASTER_DIRECT_MATCHES.csv`.
+- Both sources are fan wikis for a game that ended service on 2016-09-20. Their stat
+  tables agree with each other and with the master, but they may share an upstream
+  origin, such as the in-game encyclopedia.
+- Gamerch's card pages do not show the card number themselves. The number comes from
+  the list pages that link to them.
