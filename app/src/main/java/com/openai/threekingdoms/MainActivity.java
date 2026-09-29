@@ -241,7 +241,7 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
 
     private void showHome() {
         prepareRoot();
-        addTitle("三國志拼圖大戰重建", "v2.4 原作立繪身份驗證");
+        addTitle("三國志拼圖大戰重建", "v2.4.1 立繪證據鏈修正");
 
         boolean hasOriginalArt = addOptionalArt(
                 OriginalArtData.BACKGROUND_RESOURCE,
@@ -315,7 +315,7 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
         prepareRoot();
         addTitle(
                 "原作美術圖庫",
-                "16 張立繪／3 張 HIGH 身份映射");
+                "16 張立繪／身份映射重新驗證中");
 
         addOptionalArt(
                 OriginalArtData.BACKGROUND_RESOURCE,
@@ -325,15 +325,16 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
         root.addView(text(
                 "目前已整合："
                         + OriginalArtData.CHARACTER_ART.length
-                        + " 張完整角色立繪；其中 "
+                        + " 張完整角色立繪；目前 "
                         + OriginalArtData.verifiedCount()
-                        + " 張已達 HIGH 身份驗證。其餘素材仍維持 UNVERIFIED。",
+                        + " 張達 HIGH。先前 3 張映射已因證據循環而撤回，"
+                        + "全部重新按原始資料驗證。",
                 14f,
                 Color.rgb(160, 220, 255)));
 
         root.addView(text(
-                "HIGH 標準：原 APK master key 直接命中 Asset stem，"
-                        + "並由獨立公開圖鑑來源確認 card No.／身份。"
+                "HIGH 標準：必須來自原始遊戲資料的 serial／card 身份關聯，"
+                        + "再由獨立來源交叉確認。重建／測試 Master 不可作身份證據。"
                         + " 未達此標準者不命名。",
                 13f,
                 Color.rgb(255, 196, 96)));

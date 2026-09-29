@@ -1,12 +1,12 @@
 asset_id,card_no,character,variant,confidence,evidence,status
 ch_14200004_l,,,,UNVERIFIED,,research
-ch_15200025_l,102,徐晃 (Xu Huang),【大斧】,HIGH,"master_key 15200025 == asset stem; master card_no 102; public DB https://p.rakda3.net/sanpuz/b102 No.102 rarity 3 cost 6 Lv25 HP170->1040 ATK86->269 heal5->21 all equal master; see docs/CLAUDE_ASSET_REVIEW.md",reviewed
+ch_15200025_l,,,,UNVERIFIED,"Prior No.102/Xu Huang claim withdrawn: identity came from a reconstructed test master whose sprite key was deliberately borrowed; see EVIDENCE_CORRECTION.md",retracted
 ch_23100019_l,,,,UNVERIFIED,,research
 ch_24200004_l,,,,UNVERIFIED,,research
 ch_25600027_l,,,,UNVERIFIED,,research
 ch_34200004_l,,,,UNVERIFIED,,research
 ch_35300025_l,,,,UNVERIFIED,,research
-ch_35300032_l,260,于禁 (Yu Jin),base (awakens to No.261),HIGH,"master_key 35300032 == asset stem; master card_no 260; public DB https://p.rakda3.net/sanpuz/b260 No.260 rarity 2 cost 3 maxLv20 HP145 ATK96 heal31 equal master base stats; see docs/CLAUDE_ASSET_REVIEW.md",reviewed
+ch_35300032_l,,,,UNVERIFIED,"Prior No.260/Yu Jin claim withdrawn: identity came from a reconstructed test master whose sprite key was deliberately borrowed; see EVIDENCE_CORRECTION.md",retracted
 ch_35400027_l,,,,UNVERIFIED,,research
 ch_44200004_l,,,,UNVERIFIED,,research
 ch_45500027_l,,,,UNVERIFIED,,research
@@ -14,4 +14,4 @@ ch_45500028_l,,,,UNVERIFIED,,research
 ch_53600019_l,,,,UNVERIFIED,,research
 ch_54100023_l,,,,UNVERIFIED,,research
 ch_55600025_l,,,,UNVERIFIED,,research
-ch_56400035_l,350,成公英 (Cheng Gongying),base (awakens to No.351),HIGH,"master_key 56400035 == asset stem; master card_no 350; public DB https://p.rakda3.net/sanpuz/b350 No.350 rarity 2 cost 5 maxLv15 HP142 ATK159 heal43 equal master base stats; see docs/CLAUDE_ASSET_REVIEW.md",reviewed
+ch_56400035_l,,,,UNVERIFIED,"Prior No.350/Cheng Gongying claim withdrawn: identity came from a reconstructed test master whose sprite key was deliberately borrowed; see EVIDENCE_CORRECTION.md",retracted

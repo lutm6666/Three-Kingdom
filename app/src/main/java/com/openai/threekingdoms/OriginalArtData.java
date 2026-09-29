@@ -70,23 +70,13 @@ public final class OriginalArtData {
 
     public static final Entry[] CHARACTER_ART = {
             new Entry("ch_14200004_l"),
-            new Entry(
-                    "ch_15200025_l",
-                    102,
-                    "徐晃",
-                    "〖大斧〗",
-                    "HIGH"),
+            new Entry("ch_15200025_l"),
             new Entry("ch_23100019_l"),
             new Entry("ch_24200004_l"),
             new Entry("ch_25600027_l"),
             new Entry("ch_34200004_l"),
             new Entry("ch_35300025_l"),
-            new Entry(
-                    "ch_35300032_l",
-                    260,
-                    "于禁",
-                    "本體",
-                    "HIGH"),
+            new Entry("ch_35300032_l"),
             new Entry("ch_35400027_l"),
             new Entry("ch_44200004_l"),
             new Entry("ch_45500027_l"),
@@ -94,12 +84,7 @@ public final class OriginalArtData {
             new Entry("ch_53600019_l"),
             new Entry("ch_54100023_l"),
             new Entry("ch_55600025_l"),
-            new Entry(
-                    "ch_56400035_l",
-                    350,
-                    "成公英",
-                    "本體",
-                    "HIGH")
+            new Entry("ch_56400035_l")
     };
 
     private OriginalArtData() {}

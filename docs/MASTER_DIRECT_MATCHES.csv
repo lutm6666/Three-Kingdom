@@ -1,4 +1,4 @@
-asset_id,master_key,card_no,rarity,type_1,grow_type,cost,region_1,max_level,default_hp,default_atk,default_heal,max_hp,max_atk,max_heal,skill_id,leader_skill_id,master_sha256
-ch_15200025_l,15200025,102,3,6,0,6,0,25,170,86,5,1040,269,21,990002,990101,d7a4eb4de6b1b00d0a7320622f041e9a159573ba38d08738ead793865ab83eaf
-ch_35300032_l,35300032,260,2,0,5,3,0,20,145,96,31,290,192,62,,,d7a4eb4de6b1b00d0a7320622f041e9a159573ba38d08738ead793865ab83eaf
-ch_56400035_l,56400035,350,2,4,8,5,4,15,142,159,43,256,334,86,990001,,d7a4eb4de6b1b00d0a7320622f041e9a159573ba38d08738ead793865ab83eaf
+asset_id,master_key,card_no,rarity,type_1,grow_type,cost,region_1,max_level,default_hp,default_atk,default_heal,max_hp,max_atk,max_heal,skill_id,leader_skill_id,master_sha256,provenance,identity_usable
+ch_15200025_l,15200025,102,3,6,0,6,0,25,170,86,5,1040,269,21,990002,990101,d7a4eb4de6b1b00d0a7320622f041e9a159573ba38d08738ead793865ab83eaf,reconstructed_test_master,false
+ch_35300032_l,35300032,260,2,0,5,3,0,20,145,96,31,290,192,62,,,d7a4eb4de6b1b00d0a7320622f041e9a159573ba38d08738ead793865ab83eaf,reconstructed_test_master,false
+ch_56400035_l,56400035,350,2,4,8,5,4,15,142,159,43,256,334,86,990001,,d7a4eb4de6b1b00d0a7320622f041e9a159573ba38d08738ead793865ab83eaf,reconstructed_test_master,false
