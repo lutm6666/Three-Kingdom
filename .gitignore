@@ -1,0 +1,31 @@
+# Android / Gradle
+.gradle/
+**/build/
+local.properties
+*.iml
+.idea/
+.bootstrap/
+
+# Local mechanical/regression outputs
+/mechanical_*/
+/*_test/
+/finisher_test/
+/stage_v*_test/
+/card_v*_test/
+/drop_v*_test/
+/enhancement_v*_test/
+/*.xml
+/*.png
+
+# Backups and packages
+*.bak
+*.apk
+*.aab
+*.keystore
+*.jks
+*.pem
+.env
+.env.*
+
+# Original commercial-game artwork stays local
+app/src/main/res/drawable-nodpi/sgpz_*.png
