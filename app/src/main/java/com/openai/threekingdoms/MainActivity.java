@@ -332,8 +332,10 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
         if (summary.valid) {
             root.addView(text(
                     "角色：" + summary.characters
-                            + "　其中 VERIFIED："
-                            + summary.verifiedCharacters,
+                            + "　record VERIFIED："
+                            + summary.verifiedCharacters
+                            + "　PARTIAL："
+                            + summary.partialCharacters,
                     16f,
                     Color.WHITE));
 

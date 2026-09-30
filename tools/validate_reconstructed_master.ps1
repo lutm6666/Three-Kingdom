@@ -5,6 +5,17 @@ param(
 $ErrorActionPreference = "Stop"
 $allowed = @("VERIFIED", "RECONSTRUCTED", "PARTIAL", "UNKNOWN")
 
+function Check-ConfidenceValue([object]$value, [string]$where) {
+    if ($null -eq $value) {
+        throw "Missing confidence at $where"
+    }
+
+    $s = [string]$value
+    if ($allowed -notcontains $s) {
+        throw "Invalid confidence '$s' at $where"
+    }
+}
+
 if (-not (Test-Path $Path)) {
     throw "Master file not found: $Path"
 }
@@ -34,22 +45,33 @@ if (($stageIds | Sort-Object -Unique).Count -ne $stageIds.Count) {
     throw "Duplicate stage id"
 }
 
-function Check-ConfidenceValue([object]$value, [string]$where) {
-    if ($null -eq $value) { return }
-    $s = [string]$value
-    if ($allowed -notcontains $s) {
-        throw "Invalid confidence '$s' at $where"
-    }
-}
+$mappedArtCount = 0
 
 foreach ($c in $m.characters) {
     Check-ConfidenceValue $c.confidence "character:$($c.id)"
     Check-ConfidenceValue $c.stats.confidence "character:$($c.id).stats"
     Check-ConfidenceValue $c.active_skill.confidence "character:$($c.id).active_skill"
+
     if ($null -ne $c.leader_skill) {
         Check-ConfidenceValue $c.leader_skill.confidence "character:$($c.id).leader_skill"
     }
+
     Check-ConfidenceValue $c.art_identity_confidence "character:$($c.id).art"
+
+    if ($c.confidence -eq "VERIFIED" -and $null -eq $c.card_no) {
+        throw "VERIFIED character lacks card_no: $($c.id)"
+    }
+
+    if ($null -eq $c.art_asset_id) {
+        if ($c.art_identity_confidence -eq "VERIFIED") {
+            throw "VERIFIED art confidence without art_asset_id: $($c.id)"
+        }
+    } else {
+        if ($c.art_identity_confidence -ne "VERIFIED") {
+            throw "Mapped art must be VERIFIED: $($c.id)"
+        }
+        $mappedArtCount++
+    }
 }
 
 foreach ($s in $m.stages) {
@@ -62,6 +84,10 @@ foreach ($s in $m.stages) {
     if ($s.boss_wave.Count -lt 1) {
         throw "Empty boss_wave at stage:$($s.id)"
     }
+
+    Check-ConfidenceValue $s.field_confidence.difficulty "stage:$($s.id).difficulty"
+    Check-ConfidenceValue $s.field_confidence.stamina "stage:$($s.id).stamina"
+    Check-ConfidenceValue $s.field_confidence.wave_count "stage:$($s.id).wave_count"
     Check-ConfidenceValue $s.rewards.confidence "stage:$($s.id).rewards"
     Check-ConfidenceValue $s.composition.confidence "stage:$($s.id).composition"
     Check-ConfidenceValue $s.encounter_rule.confidence "stage:$($s.id).encounter_rule"
@@ -73,11 +99,24 @@ foreach ($s in $m.stages) {
     }
 }
 
-if ([int]$m.art_assets.identities_verified -ne 0) {
-    throw "Art identity count must remain 0 until non-circular evidence exists"
+Check-ConfidenceValue $m.enums.unit_advantage.confidence "enums.unit_advantage"
+Check-ConfidenceValue $m.mechanics.faction_advantage.confidence "mechanics.faction_advantage"
+Check-ConfidenceValue $m.mechanics.encounter_seed.confidence "mechanics.encounter_seed"
+Check-ConfidenceValue $m.mechanics.drop_rate_percent.confidence "mechanics.drop_rate_percent"
+Check-ConfidenceValue $m.mechanics.enhancement.confidence "mechanics.enhancement"
+Check-ConfidenceValue $m.mechanics.enhancement.low_rarity_material_base_growth.confidence "mechanics.enhancement.low_rarity_material_base_growth"
+
+if ($m.mechanics.enhancement.confidence -eq "VERIFIED" -and
+    $m.mechanics.enhancement.low_rarity_material_base_growth.confidence -ne "VERIFIED") {
+    throw "VERIFIED enhancement parent contains non-VERIFIED child"
+}
+
+if ([int]$m.art_assets.identities_verified -ne $mappedArtCount) {
+    throw "Art identity count mismatch: declared=$($m.art_assets.identities_verified) actual=$mappedArtCount"
 }
 
 $verifiedChars = @($m.characters | Where-Object { $_.confidence -eq "VERIFIED" }).Count
+$partialChars = @($m.characters | Where-Object { $_.confidence -eq "PARTIAL" }).Count
 $reconstructedStages = @($m.stages | Where-Object { $_.encounter_rule.confidence -eq "RECONSTRUCTED" }).Count
 
 Write-Output "MASTER_VALID=TRUE"
@@ -85,6 +124,7 @@ Write-Output ("SCHEMA=" + $m.meta.schema)
 Write-Output ("VERSION=" + $m.meta.version)
 Write-Output ("CHARACTERS=" + $m.characters.Count)
 Write-Output ("VERIFIED_CHARACTERS=" + $verifiedChars)
+Write-Output ("PARTIAL_CHARACTERS=" + $partialChars)
 Write-Output ("STAGES=" + $m.stages.Count)
 Write-Output ("RECONSTRUCTED_ENCOUNTER_STAGES=" + $reconstructedStages)
 Write-Output ("ART_IDENTITIES_VERIFIED=" + $m.art_assets.identities_verified)

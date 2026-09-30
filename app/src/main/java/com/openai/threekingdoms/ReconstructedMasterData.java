@@ -21,6 +21,7 @@ public final class ReconstructedMasterData {
         public final int version;
         public final int characters;
         public final int verifiedCharacters;
+        public final int partialCharacters;
         public final int stages;
         public final int reconstructedEncounterStages;
         public final int verifiedArtIdentities;
@@ -32,6 +33,7 @@ public final class ReconstructedMasterData {
                 int version,
                 int characters,
                 int verifiedCharacters,
+                int partialCharacters,
                 int stages,
                 int reconstructedEncounterStages,
                 int verifiedArtIdentities,
@@ -41,6 +43,7 @@ public final class ReconstructedMasterData {
             this.version = version;
             this.characters = characters;
             this.verifiedCharacters = verifiedCharacters;
+            this.partialCharacters = partialCharacters;
             this.stages = stages;
             this.reconstructedEncounterStages =
                     reconstructedEncounterStages;
@@ -82,6 +85,8 @@ public final class ReconstructedMasterData {
                     root.getJSONArray("stages");
 
             int verifiedCharacters = 0;
+            int partialCharacters = 0;
+            int mappedArt = 0;
             Set<String> characterIds = new HashSet<>();
 
             for (int i = 0; i < characters.length(); i++) {
@@ -94,12 +99,20 @@ public final class ReconstructedMasterData {
                             "duplicate character id: " + id);
                 }
 
-                validateConfidence(
-                        character.getString("confidence"));
+                String recordConfidence =
+                        character.getString("confidence");
+                validateConfidence(recordConfidence);
 
-                if ("VERIFIED".equals(
-                        character.getString("confidence"))) {
+                if ("VERIFIED".equals(recordConfidence)) {
                     verifiedCharacters++;
+
+                    if (character.isNull("card_no")) {
+                        throw new IllegalStateException(
+                                "VERIFIED character lacks card_no: "
+                                        + id);
+                    }
+                } else if ("PARTIAL".equals(recordConfidence)) {
+                    partialCharacters++;
                 }
 
                 validateConfidence(
@@ -110,9 +123,29 @@ public final class ReconstructedMasterData {
                         character.getJSONObject("active_skill")
                                 .getString("confidence"));
 
-                validateConfidence(
+                if (!character.isNull("leader_skill")) {
+                    validateConfidence(
+                            character.getJSONObject("leader_skill")
+                                    .getString("confidence"));
+                }
+
+                String artConfidence =
                         character.getString(
-                                "art_identity_confidence"));
+                                "art_identity_confidence");
+                validateConfidence(artConfidence);
+
+                if (character.isNull("art_asset_id")) {
+                    if ("VERIFIED".equals(artConfidence)) {
+                        throw new IllegalStateException(
+                                "VERIFIED art without asset: " + id);
+                    }
+                } else {
+                    if (!"VERIFIED".equals(artConfidence)) {
+                        throw new IllegalStateException(
+                                "mapped art is not VERIFIED: " + id);
+                    }
+                    mappedArt++;
+                }
             }
 
             int reconstructedEncounterStages = 0;
@@ -127,6 +160,22 @@ public final class ReconstructedMasterData {
                             "duplicate stage id: " + id);
                 }
 
+                JSONObject fieldConfidence =
+                        stage.getJSONObject("field_confidence");
+                validateConfidence(
+                        fieldConfidence.getString("difficulty"));
+                validateConfidence(
+                        fieldConfidence.getString("stamina"));
+                validateConfidence(
+                        fieldConfidence.getString("wave_count"));
+
+                validateConfidence(
+                        stage.getJSONObject("rewards")
+                                .getString("confidence"));
+                validateConfidence(
+                        stage.getJSONObject("composition")
+                                .getString("confidence"));
+
                 String encounterConfidence =
                         stage.getJSONObject("encounter_rule")
                                 .getString("confidence");
@@ -138,14 +187,51 @@ public final class ReconstructedMasterData {
                 }
             }
 
+            JSONObject mechanics =
+                    root.getJSONObject("mechanics");
+            validateConfidence(
+                    root.getJSONObject("enums")
+                            .getJSONObject("unit_advantage")
+                            .getString("confidence"));
+            validateConfidence(
+                    mechanics.getJSONObject("faction_advantage")
+                            .getString("confidence"));
+            validateConfidence(
+                    mechanics.getJSONObject("encounter_seed")
+                            .getString("confidence"));
+            validateConfidence(
+                    mechanics.getJSONObject("drop_rate_percent")
+                            .getString("confidence"));
+
+            JSONObject enhancement =
+                    mechanics.getJSONObject("enhancement");
+            String enhancementConfidence =
+                    enhancement.getString("confidence");
+            validateConfidence(enhancementConfidence);
+
+            String baseGrowthConfidence =
+                    enhancement
+                            .getJSONObject(
+                                    "low_rarity_material_base_growth")
+                            .getString("confidence");
+            validateConfidence(baseGrowthConfidence);
+
+            if ("VERIFIED".equals(enhancementConfidence)
+                    && !"VERIFIED".equals(baseGrowthConfidence)) {
+                throw new IllegalStateException(
+                        "VERIFIED enhancement contains "
+                                + "non-VERIFIED child");
+            }
+
             int verifiedArt =
                     root.getJSONObject("art_assets")
                             .getInt("identities_verified");
 
-            if (verifiedArt != 0) {
+            if (verifiedArt != mappedArt) {
                 throw new IllegalStateException(
-                        "art identity gate violated: "
-                                + verifiedArt);
+                        "art identity count mismatch: declared="
+                                + verifiedArt
+                                + " actual=" + mappedArt);
             }
 
             return new Summary(
@@ -154,6 +240,7 @@ public final class ReconstructedMasterData {
                     version,
                     characters.length(),
                     verifiedCharacters,
+                    partialCharacters,
                     stages.length(),
                     reconstructedEncounterStages,
                     verifiedArt,
@@ -163,6 +250,7 @@ public final class ReconstructedMasterData {
             return new Summary(
                     false,
                     "",
+                    0,
                     0,
                     0,
                     0,

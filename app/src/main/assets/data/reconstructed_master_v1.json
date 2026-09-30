@@ -313,6 +313,11 @@
       "difficulty": 1,
       "stamina": 3,
       "wave_count": 3,
+      "field_confidence": {
+        "difficulty": "UNKNOWN",
+        "stamina": "UNKNOWN",
+        "wave_count": "VERIFIED"
+      },
       "rewards": {
         "coin": 70,
         "exp": 30,
@@ -487,6 +492,11 @@
       "difficulty": 2,
       "stamina": 5,
       "wave_count": 3,
+      "field_confidence": {
+        "difficulty": "UNKNOWN",
+        "stamina": "UNKNOWN",
+        "wave_count": "VERIFIED"
+      },
       "rewards": {
         "coin": 340,
         "exp": 190,
@@ -596,6 +606,11 @@
       "difficulty": 4,
       "stamina": 5,
       "wave_count": 5,
+      "field_confidence": {
+        "difficulty": "UNKNOWN",
+        "stamina": "UNKNOWN",
+        "wave_count": "VERIFIED"
+      },
       "rewards": {
         "coin": 470,
         "exp": 340,
