@@ -1,0 +1,22 @@
+name: Validate reconstructed master
+
+on:
+  push:
+    paths:
+      - "app/src/main/assets/data/reconstructed_master_v1.json"
+      - "tools/validate_reconstructed_master.ps1"
+  pull_request:
+    paths:
+      - "app/src/main/assets/data/reconstructed_master_v1.json"
+      - "tools/validate_reconstructed_master.ps1"
+      - "docs/RECONSTRUCTED_MASTER_V1.md"
+
+jobs:
+  validate:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Validate canonical master
+        shell: powershell
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File tools/validate_reconstructed_master.ps1

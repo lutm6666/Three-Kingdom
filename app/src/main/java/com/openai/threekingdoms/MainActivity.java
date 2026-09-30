@@ -241,7 +241,7 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
 
     private void showHome() {
         prepareRoot();
-        addTitle("三國志拼圖大戰重建", "v2.4.1 立繪證據鏈修正");
+        addTitle("三國志拼圖大戰重建", "v2.5 重建 Master 資料核心");
 
         boolean hasOriginalArt = addOptionalArt(
                 OriginalArtData.BACKGROUND_RESOURCE,
@@ -293,6 +293,7 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
         root.addView(button("武將圖鑑", v -> showGeneralDex()));
         root.addView(button("武器庫", v -> showWeaponInventory()));
         root.addView(button("原作美術圖庫", v -> showOriginalArtGallery()));
+        root.addView(button("Master 資料核心", v -> showMasterCore()));
         root.addView(button("戰利品倉庫", v -> showLootInventory()));
         root.addView(button("武將招募所", v -> showRecruitment()));
         root.addView(button("進入關卡", v -> showStageSelect()));
@@ -309,6 +310,72 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
             }
         }
         return "未裝備";
+    }
+
+    private void showMasterCore() {
+        prepareRoot();
+
+        ReconstructedMasterData.Summary summary =
+                ReconstructedMasterData.loadSummary(this);
+
+        addTitle(
+                "Master 資料核心",
+                "reconstructed_master_v1.json");
+
+        root.addView(text(
+                summary.statusText(),
+                17f,
+                summary.valid
+                        ? Color.rgb(120, 230, 150)
+                        : Color.rgb(255, 120, 120)));
+
+        if (summary.valid) {
+            root.addView(text(
+                    "角色：" + summary.characters
+                            + "　其中 VERIFIED："
+                            + summary.verifiedCharacters,
+                    16f,
+                    Color.WHITE));
+
+            root.addView(text(
+                    "關卡：" + summary.stages
+                            + "　遇敵規則標為 RECONSTRUCTED："
+                            + summary.reconstructedEncounterStages,
+                    16f,
+                    Color.WHITE));
+
+            root.addView(text(
+                    "已驗證原作立繪身份："
+                            + summary.verifiedArtIdentities
+                            + " / "
+                            + OriginalArtData.CHARACTER_ART.length,
+                    16f,
+                    Color.LTGRAY));
+
+            root.addView(text(
+                    "這份 Master 是目前離線重建版的 canonical data source，"
+                            + "不是宣稱已找回的原伺服器 Master。"
+                            + " VERIFIED／RECONSTRUCTED／PARTIAL／UNKNOWN"
+                            + " 會保留到欄位層級。",
+                    13f,
+                    Color.rgb(255, 196, 96)));
+
+            root.addView(text(
+                    "原始 Master 的 native 流程已確認為 "
+                            + "master*.bin → zlib/deflate → JSON。"
+                            + " 舊伺服器與公開快照均未找到可用 payload，"
+                            + "因此目前採 provenance-first 重建。",
+                    13f,
+                    Color.rgb(160, 220, 255)));
+        } else {
+            root.addView(text(
+                    "Master 載入失敗。此版本不應繼續把新資料寫入硬編碼 Java；"
+                            + "先修復 JSON／confidence 驗證。",
+                    14f,
+                    Color.rgb(255, 120, 120)));
+        }
+
+        root.addView(button("返回首頁", v -> showHome()));
     }
 
     private void showOriginalArtGallery() {

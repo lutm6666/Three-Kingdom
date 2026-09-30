@@ -1,0 +1,798 @@
+{
+  "meta": {
+    "schema": "sgpz-reconstructed-master",
+    "version": 1,
+    "created": "2026-09-30",
+    "status": "RECONSTRUCTED",
+    "purpose": "Canonical data source for the offline Android rebuild; not claimed to be the lost original server Master.",
+    "confidence_levels": {
+      "VERIFIED": "Directly supported by original APK parser/native evidence or independently checked public game data.",
+      "RECONSTRUCTED": "Required for a playable rebuild but original exact value/algorithm is unavailable.",
+      "PARTIAL": "Identity or some fields are verified; other fields remain unknown.",
+      "UNKNOWN": "No sufficiently reliable value is available."
+    },
+    "original_master_recovery": {
+      "server_dns": "unavailable",
+      "wayback_master_payload": "not found",
+      "common_crawl_asset_hosts": "not found in useful form",
+      "native_pipeline": "master*.bin -> zlib/deflate -> JSON -> RFMasterDataManager",
+      "decision": "Proceed with a provenance-first reconstruction instead of blocking development."
+    }
+  },
+  "enums": {
+    "factions": {
+      "WEI": 0,
+      "WU": 1,
+      "SHU": 2,
+      "HAN": 3,
+      "QUN": 4
+    },
+    "original_parser_troop_types": {
+      "BOW": 0,
+      "SWORD": 1,
+      "SPEAR": 2,
+      "CAVALRY": 3,
+      "SHEN_SUAN": 4,
+      "GUI_MOU": 5,
+      "BARBARIAN": 6
+    },
+    "unit_advantage": {
+      "default": [
+        "WEI>WU",
+        "WU>SHU",
+        "SHU>WEI",
+        "HAN>QUN",
+        "QUN>HAN"
+      ],
+      "advantage_multiplier": 2,
+      "disadvantage_multiplier": 0.5,
+      "confidence": "VERIFIED"
+    },
+    "combo_multiplier_per_extra_combo": 0.25
+  },
+  "characters": [
+    {
+      "id": "guan_yu_meiran",
+      "card_no": null,
+      "name": "關羽",
+      "variant": "美髯公",
+      "faction": "SHU",
+      "troop_type": "SPEAR",
+      "rarity": 6,
+      "max_level": 99,
+      "stats": {
+        "lv1": {
+          "hp": 520,
+          "atk": 300,
+          "recovery": 60
+        },
+        "max": {
+          "hp": 3208,
+          "atk": 1230,
+          "recovery": 191
+        },
+        "confidence": "VERIFIED"
+      },
+      "active_skill": {
+        "name": "青龍咆哮",
+        "description": "使用武將攻擊力50倍的「蜀」攻擊",
+        "cooldown": {
+          "base": 30,
+          "min": 20
+        },
+        "confidence": "VERIFIED"
+      },
+      "leader_skill": {
+        "name": "義侠の武",
+        "description": "敵方「蜀」武將造成的傷害減半",
+        "confidence": "VERIFIED"
+      },
+      "art_asset_id": null,
+      "art_identity_confidence": "UNKNOWN",
+      "confidence": "VERIFIED"
+    },
+    {
+      "id": "zhao_yun_yijinfeng",
+      "card_no": null,
+      "name": "趙雲",
+      "variant": "一陣の風",
+      "faction": "SHU",
+      "troop_type": "CAVALRY",
+      "rarity": 5,
+      "max_level": 50,
+      "stats": {
+        "lv1": {
+          "hp": 280,
+          "atk": 249,
+          "recovery": 59
+        },
+        "max": {
+          "hp": 1260,
+          "atk": 872,
+          "recovery": 177
+        },
+        "confidence": "VERIFIED"
+      },
+      "active_skill": {
+        "name": "長坂一騎駆け",
+        "description": "下一次單位移動時間延長至10秒",
+        "cooldown": {
+          "base": 20,
+          "min": 14
+        },
+        "confidence": "VERIFIED"
+      },
+      "leader_skill": {
+        "name": "神威に至る槍術",
+        "description": "單位移動時間大幅延長；受到的傷害大幅減少",
+        "exact_damage_multiplier": null,
+        "confidence": "PARTIAL"
+      },
+      "art_asset_id": null,
+      "art_identity_confidence": "UNKNOWN",
+      "confidence": "VERIFIED"
+    },
+    {
+      "id": "zhuge_liang_wolong",
+      "card_no": null,
+      "name": "諸葛亮",
+      "variant": "臥龍雌伏",
+      "faction": "SHU",
+      "troop_type": "SHEN_SUAN",
+      "rarity": 4,
+      "max_level": 50,
+      "stats": {
+        "lv1": {
+          "hp": 287,
+          "atk": 264,
+          "recovery": 53
+        },
+        "max": {
+          "hp": 718,
+          "atk": 554,
+          "recovery": 111
+        },
+        "confidence": "VERIFIED"
+      },
+      "active_skill": {
+        "name": "奇門遁甲",
+        "description": "將「魏」單位轉換為「蜀」單位",
+        "cooldown": {
+          "base": 10,
+          "min": 5
+        },
+        "confidence": "VERIFIED"
+      },
+      "leader_skill": {
+        "name": "八卦陣",
+        "description": "我方「蜀」武將 HP ×1.5",
+        "multiplier": 1.5,
+        "confidence": "VERIFIED"
+      },
+      "art_asset_id": null,
+      "art_identity_confidence": "UNKNOWN",
+      "confidence": "VERIFIED"
+    },
+    {
+      "id": "lu_bu_zhangui",
+      "card_no": null,
+      "name": "呂布",
+      "variant": "戦鬼",
+      "faction": "QUN",
+      "troop_type": "CAVALRY",
+      "rarity": 6,
+      "max_level": 50,
+      "stats": {
+        "lv1": {
+          "hp": 341,
+          "atk": 277,
+          "recovery": 22
+        },
+        "max": {
+          "hp": 1705,
+          "atk": 970,
+          "recovery": 176
+        },
+        "confidence": "VERIFIED"
+      },
+      "active_skill": {
+        "name": "天下無双",
+        "description": "敵單體受到使用武將攻擊力30倍的無視防禦攻擊",
+        "cooldown": {
+          "base": 35,
+          "min": 35
+        },
+        "confidence": "VERIFIED"
+      },
+      "leader_skill": {
+        "name": "吠虎の猛勇",
+        "description": "HP全滿時，全武將攻擊力 ×3.5",
+        "multiplier": 3.5,
+        "confidence": "VERIFIED"
+      },
+      "art_asset_id": null,
+      "art_identity_confidence": "UNKNOWN",
+      "confidence": "VERIFIED"
+    },
+    {
+      "id": "zhou_yu_xiaobawang",
+      "card_no": null,
+      "name": "周瑜",
+      "variant": "小覇王盟友",
+      "faction": "WU",
+      "troop_type": "GUI_MOU",
+      "rarity": 5,
+      "max_level": 50,
+      "stats": {
+        "lv1": {
+          "hp": 320,
+          "atk": 291,
+          "recovery": 76
+        },
+        "max": {
+          "hp": 1280,
+          "atk": 1019,
+          "recovery": 243
+        },
+        "confidence": "VERIFIED"
+      },
+      "active_skill": {
+        "name": "孫呉の業火",
+        "description": "敵全體受到部隊「吳」攻擊力8倍的攻擊",
+        "cooldown": {
+          "base": 28,
+          "min": 15
+        },
+        "confidence": "VERIFIED"
+      },
+      "leader_skill": {
+        "name": "借刀殺人の計",
+        "description": "攻擊後進行強力再攻擊；鬼謀武將攻擊力 ×2.2",
+        "troop_multiplier": 2.2,
+        "follow_up_ratio": null,
+        "confidence": "PARTIAL"
+      },
+      "art_asset_id": null,
+      "art_identity_confidence": "UNKNOWN",
+      "confidence": "VERIFIED"
+    },
+    {
+      "id": "zhang_liang_no64",
+      "card_no": 64,
+      "name": "張梁",
+      "variant": "本體",
+      "faction": "QUN",
+      "troop_type": "SWORD",
+      "rarity": 2,
+      "max_level": 15,
+      "stats": {
+        "lv1": {
+          "hp": 57,
+          "atk": 51,
+          "recovery": 13
+        },
+        "max": {
+          "hp": 342,
+          "atk": 166,
+          "recovery": 54
+        },
+        "confidence": "VERIFIED"
+      },
+      "active_skill": {
+        "name": "黃巾的暴威",
+        "description": "3回合小幅降低敵方防禦",
+        "cooldown": {
+          "base": 14,
+          "min": 6
+        },
+        "confidence": "VERIFIED"
+      },
+      "leader_skill": null,
+      "art_asset_id": null,
+      "art_identity_confidence": "UNKNOWN",
+      "enhancement_curve": {
+        "type": "Next.5",
+        "confidence": "RECONSTRUCTED"
+      },
+      "confidence": "VERIFIED"
+    }
+  ],
+  "stages": [
+    {
+      "id": "cao_yellow_turban_01",
+      "name": "奸雄的初陣",
+      "chapter": "曹操軍編・黃巾討伐戰",
+      "difficulty": 1,
+      "stamina": 3,
+      "wave_count": 3,
+      "rewards": {
+        "coin": 70,
+        "exp": 30,
+        "confidence": "RECONSTRUCTED"
+      },
+      "composition": {
+        "fixed_boss_wave": [
+          "周倉",
+          "黃巾槍兵",
+          "黃巾槍兵"
+        ],
+        "confidence": "VERIFIED"
+      },
+      "encounter_rule": {
+        "min_enemies": 1,
+        "max_enemies": 2,
+        "weighting": "equal",
+        "confidence": "RECONSTRUCTED"
+      },
+      "common_pool": [
+        {
+          "name": "孫軍弓兵",
+          "faction": "WU",
+          "hp": 180,
+          "atk": 16,
+          "turn": 2,
+          "def": 0,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "祖茂",
+          "faction": "WU",
+          "hp": 320,
+          "atk": 38,
+          "turn": 3,
+          "def": 0,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "劉軍槍兵",
+          "faction": "SHU",
+          "hp": 180,
+          "atk": 17,
+          "turn": 2,
+          "def": 0,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "簡雍",
+          "faction": "SHU",
+          "hp": 280,
+          "atk": 30,
+          "turn": 2,
+          "def": 0,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "黃巾槍兵",
+          "faction": "QUN",
+          "hp": 220,
+          "atk": 15,
+          "turn": 2,
+          "def": 0,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "馬元義",
+          "faction": "QUN",
+          "hp": 360,
+          "atk": 34,
+          "turn": 4,
+          "def": 0,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "白秘玉・左慈",
+          "faction": "QUN",
+          "hp": 250,
+          "atk": 20,
+          "turn": 2,
+          "def": 5,
+          "confidence": {
+            "atk": "RECONSTRUCTED",
+            "turn": "RECONSTRUCTED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "大宛馬・左慈",
+          "faction": "QUN",
+          "hp": 300,
+          "atk": 25,
+          "turn": 2,
+          "def": 5,
+          "confidence": {
+            "atk": "RECONSTRUCTED",
+            "turn": "RECONSTRUCTED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        }
+      ],
+      "boss_wave": [
+        {
+          "name": "周倉",
+          "faction": "QUN",
+          "hp": 650,
+          "atk": 54,
+          "turn": 4,
+          "def": 5,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "黃巾槍兵",
+          "faction": "QUN",
+          "hp": 220,
+          "atk": 15,
+          "turn": 2,
+          "def": 0,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "黃巾槍兵",
+          "faction": "QUN",
+          "hp": 220,
+          "atk": 15,
+          "turn": 2,
+          "def": 0,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cao_iron_gate_01",
+      "name": "要衝之地",
+      "chapter": "曹操軍編・鐵門峽之戰",
+      "difficulty": 2,
+      "stamina": 5,
+      "wave_count": 3,
+      "rewards": {
+        "coin": 340,
+        "exp": 190,
+        "confidence": "RECONSTRUCTED"
+      },
+      "composition": {
+        "fixed_boss_wave": [
+          "張寶",
+          "黃巾槍兵",
+          "黃巾槍兵"
+        ],
+        "confidence": "VERIFIED"
+      },
+      "encounter_rule": {
+        "min_enemies": 1,
+        "max_enemies": 2,
+        "weighting": "equal",
+        "confidence": "RECONSTRUCTED"
+      },
+      "common_pool": [
+        {
+          "name": "青色秘藥・左慈",
+          "faction": "WEI",
+          "hp": 500,
+          "atk": 70,
+          "turn": 2,
+          "def": 10,
+          "confidence": {
+            "atk": "RECONSTRUCTED",
+            "turn": "RECONSTRUCTED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "黃巾槍兵",
+          "faction": "QUN",
+          "hp": 520,
+          "atk": 51,
+          "turn": 2,
+          "def": 10,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "張曼成",
+          "faction": "QUN",
+          "hp": 780,
+          "atk": 95,
+          "turn": 4,
+          "def": 15,
+          "confidence": {
+            "atk": "RECONSTRUCTED",
+            "turn": "RECONSTRUCTED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        }
+      ],
+      "boss_wave": [
+        {
+          "name": "張寶",
+          "faction": "QUN",
+          "hp": 1500,
+          "atk": 130,
+          "turn": 3,
+          "def": 25,
+          "confidence": {
+            "atk": "RECONSTRUCTED",
+            "turn": "RECONSTRUCTED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "黃巾槍兵",
+          "faction": "QUN",
+          "hp": 520,
+          "atk": 51,
+          "turn": 2,
+          "def": 10,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "黃巾槍兵",
+          "faction": "QUN",
+          "hp": 520,
+          "atk": 51,
+          "turn": 2,
+          "def": 10,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cao_guangzong_01",
+      "name": "黃巾本陣",
+      "chapter": "曹操軍編・廣宗之戰",
+      "difficulty": 4,
+      "stamina": 5,
+      "wave_count": 5,
+      "rewards": {
+        "coin": 470,
+        "exp": 340,
+        "confidence": "RECONSTRUCTED"
+      },
+      "composition": {
+        "fixed_boss_wave": [
+          "周倉"
+        ],
+        "boss_atk": 201,
+        "boss_turn": 3,
+        "confidence": "VERIFIED"
+      },
+      "encounter_rule": {
+        "min_enemies": 1,
+        "max_enemies": 2,
+        "weighting": "equal",
+        "confidence": "RECONSTRUCTED"
+      },
+      "common_pool": [
+        {
+          "name": "青秘玉・左慈",
+          "faction": "WEI",
+          "hp": 550,
+          "atk": 20,
+          "turn": 2,
+          "def": 10,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "朱治",
+          "faction": "WU",
+          "hp": 850,
+          "atk": 149,
+          "turn": 4,
+          "def": 15,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "韓當",
+          "faction": "WU",
+          "hp": 1000,
+          "atk": 191,
+          "turn": 5,
+          "def": 20,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "劉軍槍兵",
+          "faction": "SHU",
+          "hp": 700,
+          "atk": 48,
+          "turn": 2,
+          "def": 10,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "關羽",
+          "faction": "SHU",
+          "hp": 1200,
+          "atk": 167,
+          "turn": 4,
+          "def": 25,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "黃巾槍兵",
+          "faction": "QUN",
+          "hp": 700,
+          "atk": 122,
+          "turn": 3,
+          "def": 20,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "黃巾兵長",
+          "faction": "QUN",
+          "hp": 900,
+          "atk": 80,
+          "turn": 2,
+          "def": 25,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "張寶",
+          "faction": "QUN",
+          "hp": 1300,
+          "atk": 161,
+          "turn": 4,
+          "def": 35,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        },
+        {
+          "name": "張梁",
+          "faction": "QUN",
+          "hp": 1500,
+          "atk": 180,
+          "turn": 5,
+          "def": 40,
+          "confidence": {
+            "atk": "RECONSTRUCTED",
+            "turn": "RECONSTRUCTED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        }
+      ],
+      "boss_wave": [
+        {
+          "name": "周倉",
+          "faction": "QUN",
+          "hp": 2200,
+          "atk": 201,
+          "turn": 3,
+          "def": 50,
+          "confidence": {
+            "atk": "VERIFIED",
+            "turn": "VERIFIED",
+            "hp_def": "RECONSTRUCTED"
+          }
+        }
+      ]
+    }
+  ],
+  "mechanics": {
+    "board": {
+      "columns": 6,
+      "rows": 5,
+      "unit_types": [
+        "WEI",
+        "WU",
+        "SHU",
+        "HAN",
+        "QUN",
+        "PEACH"
+      ],
+      "confidence": "VERIFIED"
+    },
+    "normal_move_seconds": {
+      "value": 5,
+      "confidence": "VERIFIED"
+    },
+    "combo_multiplier": {
+      "formula": "1 + 0.25*(combo_count-1)",
+      "confidence": "VERIFIED"
+    },
+    "faction_advantage": {
+      "advantage": 2,
+      "disadvantage": 0.5,
+      "confidence": "VERIFIED"
+    },
+    "encounter_seed": {
+      "deterministic": true,
+      "confidence": "RECONSTRUCTED"
+    },
+    "drop_rate_percent": {
+      "value": 50,
+      "confidence": "RECONSTRUCTED"
+    },
+    "enhancement": {
+      "coin_cost_formula": "target_level * 100 * material_count",
+      "same_faction_growth_multiplier": 1.5,
+      "confidence": "VERIFIED",
+      "low_rarity_material_base_growth": {
+        "star1": 100,
+        "star2": 200,
+        "confidence": "RECONSTRUCTED"
+      }
+    }
+  },
+  "art_assets": {
+    "character_full_art_count": 16,
+    "identities_verified": 0,
+    "policy": "Asset IDs remain UNVERIFIED until a non-circular identity source is found.",
+    "confidence": "VERIFIED"
+  }
+}
