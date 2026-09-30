@@ -285,13 +285,11 @@ public final class ReconstructedMasterData {
                 if (index < 0) continue;
                 if (!matched.add(index)) throw new IllegalStateException("duplicate roster mapping");
                 GameData.General old = next[index];
-                {
-                    String[] factions = {"WEI", "WU", "SHU", "HAN", "QUN"};
-                    String[] troops = {"SWORD", "CAVALRY", "SPEAR", "BOW", "BARBARIAN", "GUI_MOU", "SHEN_SUAN"};
-                    if (!factions[old.faction].equals(row.getString("faction"))
-                            || !troops[old.troopType].equals(row.getString("troop_type")))
-                        throw new IllegalStateException("roster enum mismatch: " + old.id);
-                }
+                String[] factions = {"WEI", "WU", "SHU", "HAN", "QUN"};
+                String[] troops = {"SWORD", "CAVALRY", "SPEAR", "BOW", "BARBARIAN", "GUI_MOU", "SHEN_SUAN"};
+                if (!factions[old.faction].equals(row.getString("faction"))
+                        || !troops[old.troopType].equals(row.getString("troop_type")))
+                    throw new IllegalStateException("roster enum mismatch: " + old.id);
                 JSONObject stats = row.getJSONObject("stats");
                 JSONObject low = stats.getJSONObject("lv1");
                 JSONObject high = stats.getJSONObject("max");
@@ -318,9 +316,13 @@ public final class ReconstructedMasterData {
     }
 
     private static int nonnegative(JSONObject row, String key) throws Exception {
-        int value = row.getInt(key);
-        if (value < 0) throw new IllegalStateException("negative " + key);
-        return value;
+        Object raw = row.get(key);
+        if (!(raw instanceof Number)) throw new IllegalStateException("non-numeric " + key);
+        double value = ((Number) raw).doubleValue();
+        if (Double.isNaN(value) || Double.isInfinite(value)
+                || value < 0 || value > Integer.MAX_VALUE || value != Math.rint(value))
+            throw new IllegalStateException("invalid integer " + key);
+        return (int) value;
     }
 
     private static int positive(JSONObject row, String key) throws Exception {

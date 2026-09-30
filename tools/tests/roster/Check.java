@@ -16,6 +16,14 @@ public class Check {
   context.assets.json = root.toString();
   if (ReconstructedMasterData.applyRoster(context) == null || GameData.get(1) != before) throw new AssertionError("partial mutation");
   if (GameData.get(3).troopType != GameData.CAVALRY || GameData.get(0).id != 0 || GameData.ROSTER.length != 10) throw new AssertionError("save IDs changed");
-  System.out.println("PASS: canonical load, changed JSON applied, enum rejection, atomic rollback, stable IDs");
+  root.getJSONArray("characters").getJSONObject(1).put("troop_type", "CAVALRY");
+  for (Object bad : new Object[]{-1, 12.5, "777", 2147483648L, JSONObject.NULL}) {
+   first.getJSONObject("stats").getJSONObject("lv1").put("hp", bad);
+   context.assets.json = root.toString();
+   if (ReconstructedMasterData.applyRoster(context) == null || GameData.get(1) != before) throw new AssertionError("invalid integer accepted: " + bad);
+  }
+  context.assets.json = "{broken";
+  if (ReconstructedMasterData.applyRoster(context) == null || GameData.get(1) != before) throw new AssertionError("corrupt JSON mutated roster");
+  System.out.println("PASS: canonical load, changed JSON applied, enum rejection, atomic rollback, stable IDs, invalid numeric fields, corrupt JSON");
  }
 }
