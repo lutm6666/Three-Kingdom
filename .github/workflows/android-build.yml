@@ -8,6 +8,7 @@ on:
       - 'gradle/**'
       - 'tools/test_roster_loader.py'
       - 'tools/android_smoke.py'
+      - 'tools/verify_battle_save.py'
       - 'tools/tests/roster/**'
       - '.github/workflows/android-build.yml'
   push:
@@ -18,6 +19,7 @@ on:
       - 'gradle/**'
       - 'tools/test_roster_loader.py'
       - 'tools/android_smoke.py'
+      - 'tools/verify_battle_save.py'
       - 'tools/tests/roster/**'
       - '.github/workflows/android-build.yml'
 
@@ -80,8 +82,8 @@ jobs:
             adb -s emulator-5554 install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
             adb -s emulator-5554 shell am instrument -w com.openai.threekingdoms.test/com.openai.threekingdoms.test.BattleRegression > battle-test-result.txt
             cat battle-test-result.txt
-            grep -q 'PASS: all waves, coins, EXP, unlock, drops, duplicate guard, replay, defeat' battle-test-result.txt
+            grep -q 'PASS: three stages, all waves, coins, EXP level-up, unlock, drops, duplicate guard, replay, defeat' battle-test-result.txt
             grep -q 'INSTRUMENTATION_CODE: -1' battle-test-result.txt
             adb -s emulator-5554 shell am force-stop com.openai.threekingdoms
             adb -s emulator-5554 exec-out run-as com.openai.threekingdoms cat shared_prefs/progress.xml > battle-progress.xml
-            python -c 'import xml.etree.ElementTree as E; d={e.attrib["name"]:int(e.attrib["value"]) for e in E.parse("battle-progress.xml").getroot().findall("int")}; assert d["coins"]==140 and d["highest_unlocked_stage"]==1; assert all(d["exp_"+str(i)]==60 for i in range(5)); print("PASS: reward save persisted after process stop")'
+            python tools/verify_battle_save.py battle-test-result.txt battle-progress.xml
