@@ -1030,12 +1030,14 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
                 Color.WHITE));
 
         root.addView(text(
-                "原作對照卡面：" + g.sourceVariant
+                "資料來源【" + g.provenance.label + "】"
+                        + "　卡面：" + g.sourceVariant
                         + "　" + g.rarity
-                        + "　Max Lv." + g.maxLevel
-                        + (g.verifiedOriginal ? "【已校正】" : "【暫定】"),
+                        + "　Max Lv." + g.maxLevel,
                 15f,
-                Color.rgb(160, 220, 255)));
+                g.provenance.isOriginalVerified()
+                        ? Color.rgb(160, 220, 255)
+                        : Color.rgb(255, 196, 96)));
 
         root.addView(text(
                 "HP：" + PlayerData.effectiveHp(this, g)

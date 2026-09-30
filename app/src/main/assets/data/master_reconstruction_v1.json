@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "project_version": "2.5.0",
+  "description": "Offline reconstruction master. This is not an original server dump.",
+  "provenance_levels": {
+    "ORIGINAL_VERIFIED": "Supported by original APK/native evidence or source-backed public game database data.",
+    "RECONSTRUCTED": "Rebuilt from documented original rules/data where the exact original Master record is unavailable.",
+    "CUSTOM": "Introduced deliberately for offline playability or regression testing."
+  },
+  "factions": [
+    {"id": 0, "name": "魏", "provenance": "ORIGINAL_VERIFIED"},
+    {"id": 1, "name": "吳", "provenance": "ORIGINAL_VERIFIED"},
+    {"id": 2, "name": "蜀", "provenance": "ORIGINAL_VERIFIED"},
+    {"id": 3, "name": "漢", "provenance": "ORIGINAL_VERIFIED"},
+    {"id": 4, "name": "群", "provenance": "ORIGINAL_VERIFIED"}
+  ],
+  "troop_types": [
+    {"id": 0, "name": "劍兵", "provenance": "ORIGINAL_VERIFIED"},
+    {"id": 1, "name": "騎兵", "provenance": "ORIGINAL_VERIFIED"},
+    {"id": 2, "name": "槍兵", "provenance": "ORIGINAL_VERIFIED"},
+    {"id": 3, "name": "弓兵", "provenance": "ORIGINAL_VERIFIED"},
+    {"id": 4, "name": "蠻兵", "provenance": "ORIGINAL_VERIFIED"},
+    {"id": 5, "name": "鬼謀", "provenance": "ORIGINAL_VERIFIED"},
+    {"id": 6, "name": "神算", "provenance": "ORIGINAL_VERIFIED"}
+  ],
+  "generals": [
+    {
+      "id": 0, "name": "劉備", "variant": "孝行息子", "faction": 2, "troop_type": 0,
+      "rarity": "重建", "max_level": 50,
+      "lv1": {"hp": 850, "atk": 160, "recovery": 100},
+      "lvmax": {"hp": 3545, "atk": 748, "recovery": 350},
+      "skill": {"name": "仁德", "type": 0, "value": 900, "aux": 0, "cd": 4, "cd_min": 4},
+      "leader": {"name": "漢室仁德（暫定）", "description": "全隊最大生命 ×1.20"},
+      "provenance": "RECONSTRUCTED"
+    },
+    {
+      "id": 1, "name": "關羽", "variant": "美髯公", "faction": 2, "troop_type": 2,
+      "rarity": "★★★★★★", "max_level": 99,
+      "lv1": {"hp": 520, "atk": 300, "recovery": 60},
+      "lvmax": {"hp": 3208, "atk": 1230, "recovery": 191},
+      "skill": {"name": "青龍咆哮", "type": 10, "value": 50, "aux": 2, "cd": 30, "cd_min": 20},
+      "leader": {"name": "義侠の武", "description": "敵方「蜀」武將造成的傷害減半"},
+      "provenance": "ORIGINAL_VERIFIED"
+    },
+    {
+      "id": 2, "name": "張飛", "variant": "闘鬼", "faction": 2, "troop_type": 4,
+      "rarity": "重建", "max_level": 50,
+      "lv1": {"hp": 1050, "atk": 225, "recovery": 80},
+      "lvmax": {"hp": 3500, "atk": 900, "recovery": 240},
+      "skill": {"name": "長坂怒吼", "type": 2, "value": 2, "aux": 0, "cd": 5, "cd_min": 5},
+      "leader": {"name": "燕人之勇（暫定）", "description": "蜀勢力傷害 ×1.25"},
+      "provenance": "RECONSTRUCTED"
+    },
+    {
+      "id": 3, "name": "趙雲", "variant": "一陣の風", "faction": 2, "troop_type": 1,
+      "rarity": "★★★★★☆", "max_level": 50,
+      "lv1": {"hp": 280, "atk": 249, "recovery": 59},
+      "lvmax": {"hp": 1260, "atk": 872, "recovery": 177},
+      "skill": {"name": "長坂一騎駆け", "type": 13, "value": 10, "aux": 0, "cd": 20, "cd_min": 14},
+      "leader": {"name": "神威に至る槍術", "description": "單位移動時間大幅延長；受到的傷害大幅減少"},
+      "provenance": "ORIGINAL_VERIFIED"
+    },
+    {
+      "id": 4, "name": "諸葛亮", "variant": "臥龍雌伏", "faction": 2, "troop_type": 6,
+      "rarity": "★★★★☆☆", "max_level": 50,
+      "lv1": {"hp": 287, "atk": 264, "recovery": 53},
+      "lvmax": {"hp": 718, "atk": 554, "recovery": 111},
+      "skill": {"name": "奇門遁甲", "type": 12, "value": 0, "aux": 2, "cd": 10, "cd_min": 5},
+      "leader": {"name": "八卦陣", "description": "我方「蜀」武將 HP ×1.5"},
+      "provenance": "ORIGINAL_VERIFIED"
+    },
+    {
+      "id": 5, "name": "曹操", "variant": "東郡太守", "faction": 0, "troop_type": 0,
+      "rarity": "重建", "max_level": 50,
+      "lv1": {"hp": 920, "atk": 235, "recovery": 70},
+      "lvmax": {"hp": 3600, "atk": 980, "recovery": 220},
+      "skill": {"name": "魏武之威", "type": 1, "value": 1050, "aux": 0, "cd": 5, "cd_min": 5},
+      "leader": {"name": "魏武霸業（暫定）", "description": "魏勢力傷害 ×1.30"},
+      "provenance": "RECONSTRUCTED"
+    },
+    {
+      "id": 6, "name": "孫權", "variant": "若き虎の覚悟", "faction": 1, "troop_type": 0,
+      "rarity": "重建", "max_level": 50,
+      "lv1": {"hp": 940, "atk": 200, "recovery": 90},
+      "lvmax": {"hp": 3550, "atk": 900, "recovery": 300},
+      "skill": {"name": "江東固守", "type": 0, "value": 750, "aux": 0, "cd": 4, "cd_min": 4},
+      "leader": {"name": "江東基業（暫定）", "description": "吳勢力傷害 ×1.30"},
+      "provenance": "RECONSTRUCTED"
+    },
+    {
+      "id": 7, "name": "呂布", "variant": "戦鬼", "faction": 4, "troop_type": 1,
+      "rarity": "★★★★★★☆", "max_level": 50,
+      "lv1": {"hp": 341, "atk": 277, "recovery": 22},
+      "lvmax": {"hp": 1705, "atk": 970, "recovery": 176},
+      "skill": {"name": "天下無双", "type": 10, "value": 30, "aux": 4, "cd": 35, "cd_min": 35},
+      "leader": {"name": "吠虎の猛勇", "description": "HP全滿時，全武將攻擊力 ×3.5"},
+      "provenance": "ORIGINAL_VERIFIED"
+    },
+    {
+      "id": 8, "name": "貂蟬", "variant": "美女連環", "faction": 4, "troop_type": 5,
+      "rarity": "重建", "max_level": 50,
+      "lv1": {"hp": 730, "atk": 175, "recovery": 120},
+      "lvmax": {"hp": 2500, "atk": 800, "recovery": 420},
+      "skill": {"name": "閉月", "type": 0, "value": 1000, "aux": 0, "cd": 5, "cd_min": 5},
+      "leader": {"name": "傾城（暫定）", "description": "桃回復量 ×1.50"},
+      "provenance": "RECONSTRUCTED"
+    },
+    {
+      "id": 9, "name": "周瑜", "variant": "小覇王盟友", "faction": 1, "troop_type": 5,
+      "rarity": "★★★★★☆", "max_level": 50,
+      "lv1": {"hp": 320, "atk": 291, "recovery": 76},
+      "lvmax": {"hp": 1280, "atk": 1019, "recovery": 243},
+      "skill": {"name": "孫呉の業火", "type": 11, "value": 8, "aux": 1, "cd": 28, "cd_min": 15},
+      "leader": {"name": "借刀殺人の計", "description": "攻擊後進行強力再攻擊；鬼謀武將攻擊力 ×2.2"},
+      "provenance": "ORIGINAL_VERIFIED"
+    }
+  ]
+}

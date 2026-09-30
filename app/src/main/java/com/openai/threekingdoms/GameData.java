@@ -36,6 +36,8 @@ public final class GameData {
         public final int element;
         public final int troopType;
         public final String sourceVariant;
+        public final DataProvenance provenance;
+        // Compatibility field for existing battle/UI logic.
         public final boolean verifiedOriginal;
         public final String rarity;
         public final int maxLevel;
@@ -65,7 +67,7 @@ public final class GameData {
                 int faction,
                 int troopType,
                 String sourceVariant,
-                boolean verifiedOriginal,
+                DataProvenance provenance,
                 String rarity,
                 int maxLevel,
                 int hp,
@@ -89,7 +91,8 @@ public final class GameData {
             this.element = faction;
             this.troopType = troopType;
             this.sourceVariant = sourceVariant;
-            this.verifiedOriginal = verifiedOriginal;
+            this.provenance = provenance;
+            this.verifiedOriginal = provenance.isOriginalVerified();
             this.rarity = rarity;
             this.maxLevel = maxLevel;
             this.hp = hp;
@@ -183,52 +186,52 @@ public final class GameData {
     public static final General[] ROSTER = {
             // 尚未逐卡校正者：保留 v1.2 測試資料。
             new General(
-                    0, "劉備", SHU, SWORD, "孝行息子", false, "暫定", 50,
+                    0, "劉備", SHU, SWORD, "孝行息子", DataProvenance.RECONSTRUCTED, "重建", 50,
                     850, 160, 100, 3545, 748, 350,
                     "仁德", "暫定測試技能", SKILL_HEAL, 900, 0, 4, 4,
                     "漢室仁德（暫定）", "全隊最大生命 ×1.20"),
             new General(
-                    1, "關羽", SHU, SPEAR, "美髯公", true, "★★★★★★", 99,
+                    1, "關羽", SHU, SPEAR, "美髯公", DataProvenance.ORIGINAL_VERIFIED, "★★★★★★", 99,
                     520, 300, 60, 3208, 1230, 191,
                     "青龍咆哮", "使用武將攻擊力50倍的「蜀」攻擊", SKILL_SELF_ATK, 50, SHU, 30, 20,
                     "義侠の武", "敵方「蜀」武將造成的傷害減半"),
             new General(
-                    2, "張飛", SHU, BARBARIAN, "闘鬼", false, "暫定", 50,
+                    2, "張飛", SHU, BARBARIAN, "闘鬼", DataProvenance.RECONSTRUCTED, "重建", 50,
                     1050, 225, 80, 3500, 900, 240,
                     "長坂怒吼", "暫定測試技能", SKILL_DELAY, 2, 0, 5, 5,
                     "燕人之勇（暫定）", "蜀勢力傷害 ×1.25"),
             new General(
-                    3, "趙雲", SHU, CAVALRY, "一陣の風", true, "★★★★★☆", 50,
+                    3, "趙雲", SHU, CAVALRY, "一陣の風", DataProvenance.ORIGINAL_VERIFIED, "★★★★★☆", 50,
                     280, 249, 59, 1260, 872, 177,
                     "長坂一騎駆け", "10秒間自由移動單位", SKILL_FREE_MOVE, 10, 0, 20, 14,
                     "神威に至る槍術", "單位移動時間大幅延長；受到的傷害大幅減少"),
             new General(
-                    4, "諸葛亮", SHU, SHEN_SUAN, "臥龍雌伏", true, "★★★★☆☆", 50,
+                    4, "諸葛亮", SHU, SHEN_SUAN, "臥龍雌伏", DataProvenance.ORIGINAL_VERIFIED, "★★★★☆☆", 50,
                     287, 264, 53, 718, 554, 111,
                     "奇門遁甲", "將「魏」單位轉換為「蜀」單位", SKILL_CONVERT, WEI, SHU, 10, 5,
                     "八卦陣", "我方「蜀」武將 HP ×1.5"),
             new General(
-                    5, "曹操", WEI, SWORD, "東郡太守", false, "暫定", 50,
+                    5, "曹操", WEI, SWORD, "東郡太守", DataProvenance.RECONSTRUCTED, "重建", 50,
                     920, 235, 70, 3600, 980, 220,
                     "魏武之威", "暫定測試技能", SKILL_DAMAGE, 1050, 0, 5, 5,
                     "魏武霸業（暫定）", "魏勢力傷害 ×1.30"),
             new General(
-                    6, "孫權", WU, SWORD, "若き虎の覚悟", false, "暫定", 50,
+                    6, "孫權", WU, SWORD, "若き虎の覚悟", DataProvenance.RECONSTRUCTED, "重建", 50,
                     940, 200, 90, 3550, 900, 300,
                     "江東固守", "暫定測試技能", SKILL_HEAL, 750, 0, 4, 4,
                     "江東基業（暫定）", "吳勢力傷害 ×1.30"),
             new General(
-                    7, "呂布", QUN, CAVALRY, "戦鬼", true, "★★★★★★☆", 50,
+                    7, "呂布", QUN, CAVALRY, "戦鬼", DataProvenance.ORIGINAL_VERIFIED, "★★★★★★☆", 50,
                     341, 277, 22, 1705, 970, 176,
                     "天下無双", "敵單體受到使用武將攻擊力30倍的無視防禦攻擊", SKILL_SELF_ATK, 30, QUN, 35, 35,
                     "吠虎の猛勇", "HP全滿時，全武將攻擊力 ×3.5"),
             new General(
-                    8, "貂蟬", QUN, GUI_MOU, "美女連環", false, "暫定", 50,
+                    8, "貂蟬", QUN, GUI_MOU, "美女連環", DataProvenance.RECONSTRUCTED, "重建", 50,
                     730, 175, 120, 2500, 800, 420,
                     "閉月", "暫定測試技能", SKILL_HEAL, 1000, 0, 5, 5,
                     "傾城（暫定）", "桃回復量 ×1.50"),
             new General(
-                    9, "周瑜", WU, GUI_MOU, "小覇王盟友", true, "★★★★★☆", 50,
+                    9, "周瑜", WU, GUI_MOU, "小覇王盟友", DataProvenance.ORIGINAL_VERIFIED, "★★★★★☆", 50,
                     320, 291, 76, 1280, 1019, 243,
                     "孫呉の業火", "敵全體受到部隊「吳」攻擊力8倍的攻擊", SKILL_TEAM_FACTION_ATK, 8, WU, 28, 15,
                     "借刀殺人の計", "攻擊後進行強力再攻擊；鬼謀武將攻擊力 ×2.2")
