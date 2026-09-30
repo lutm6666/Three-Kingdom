@@ -39,6 +39,7 @@ jobs:
           python-version: '3.12'
       - uses: android-actions/setup-android@v3
         with:
+          cmdline-tools-version: 14742923
           packages: platform-tools
           log-accepted-android-sdk-licenses: false
       - name: Install Android platform
