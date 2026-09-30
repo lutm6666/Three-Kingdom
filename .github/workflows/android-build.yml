@@ -7,6 +7,7 @@ on:
       - '*gradle*'
       - 'gradle/**'
       - 'tools/test_roster_loader.py'
+      - 'tools/android_smoke.py'
       - 'tools/tests/roster/**'
       - '.github/workflows/android-build.yml'
   push:
@@ -16,6 +17,7 @@ on:
       - '*gradle*'
       - 'gradle/**'
       - 'tools/test_roster_loader.py'
+      - 'tools/android_smoke.py'
       - 'tools/tests/roster/**'
       - '.github/workflows/android-build.yml'
 
@@ -58,3 +60,18 @@ jobs:
               assert master['meta']['schema'] == 'sgpz-reconstructed-master'
               assert master['art_assets']['identities_verified'] == 0
           PY
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Android emulator UI and save regression
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          emulator-boot-timeout: 300
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          script: python tools/android_smoke.py --serial emulator-5554 --apk app/build/outputs/apk/debug/app-debug.apk

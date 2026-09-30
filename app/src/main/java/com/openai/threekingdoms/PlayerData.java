@@ -232,7 +232,8 @@ public final class PlayerData {
     }
 
     public static int getLevel(Context context, int generalId) {
-        return prefs(context).getInt("level_" + generalId, 1);
+        return Math.max(1, Math.min(prefs(context).getInt("level_" + generalId, 1),
+                GameData.get(generalId).maxLevel));
     }
 
     public static int getExp(Context context, int generalId) {
@@ -294,7 +295,7 @@ public final class PlayerData {
     public static GainResult addExp(Context context, int generalId, int amount) {
         SharedPreferences p = prefs(context);
         GameData.General g = GameData.get(generalId);
-        int level = p.getInt("level_" + generalId, 1);
+        int level = getLevel(context, generalId);
         int exp = p.getInt("exp_" + generalId, 0);
         int levelsGained = 0;
 

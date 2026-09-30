@@ -273,22 +273,20 @@ public final class ReconstructedMasterData {
             Set<Integer> matched = new HashSet<>();
             for (int i = 0; i < rows.length(); i++) {
                 JSONObject row = rows.getJSONObject(i);
-                int index = -1;
-                for (int j = 0; j < next.length; j++) {
-                    if (next[j].name.equals(row.getString("name"))
-                            && next[j].sourceVariant.equals(row.getString("variant"))) {
-                        if (index >= 0) throw new IllegalStateException("ambiguous roster row");
-                        index = j;
-                    }
-                }
-                // Research-only cards are not automatically recruited or assigned save IDs.
-                if (index < 0) continue;
+                if (!row.has("runtime_roster_id"))
+                    throw new IllegalStateException("missing runtime binding: " + row.getString("id"));
+                // Research-only rows explicitly have no offline save ID.
+                if (row.isNull("runtime_roster_id")) continue;
+                int index = nonnegative(row, "runtime_roster_id");
+                if (index >= next.length || !GameData.usesMasterData(index))
+                    throw new IllegalStateException("unsupported roster binding: " + index);
                 if (!matched.add(index)) throw new IllegalStateException("duplicate roster mapping");
                 GameData.General old = next[index];
-                String[] factions = {"WEI", "WU", "SHU", "HAN", "QUN"};
-                String[] troops = {"SWORD", "CAVALRY", "SPEAR", "BOW", "BARBARIAN", "GUI_MOU", "SHEN_SUAN"};
-                if (!factions[old.faction].equals(row.getString("faction"))
-                        || !troops[old.troopType].equals(row.getString("troop_type")))
+                if (!old.name.equals(row.getString("name"))
+                        || !old.sourceVariant.equals(row.getString("variant")))
+                    throw new IllegalStateException("roster identity mismatch: " + old.id);
+                if (!GameData.factionKey(old.faction).equals(row.getString("faction"))
+                        || !GameData.troopTypeKey(old.troopType).equals(row.getString("troop_type")))
                     throw new IllegalStateException("roster enum mismatch: " + old.id);
                 JSONObject stats = row.getJSONObject("stats");
                 JSONObject low = stats.getJSONObject("lv1");
@@ -307,7 +305,10 @@ public final class ReconstructedMasterData {
                         old.skillName, old.skillDescription, old.skillType, old.skillValue,
                         old.skillAux, base, min, old.leaderName, old.leaderDescription);
             }
-            if (matched.isEmpty()) throw new IllegalStateException("no playable roster rows");
+            for (int id = 0; id < next.length; id++) {
+                if (GameData.usesMasterData(id) && !matched.contains(id))
+                    throw new IllegalStateException("missing playable roster row: " + id);
+            }
             System.arraycopy(next, 0, GameData.ROSTER, 0, next.length);
             return null;
         } catch (Exception e) {
