@@ -4,6 +4,7 @@
     "version": 1,
     "created": "2026-09-30",
     "status": "RECONSTRUCTED",
+    "audit_note": "Claude audit (issue #9): VERIFIED labels on character stats/skills, stage ATK/TURN and mechanics are maintainer-attested; this repository stores no per-field original source. See docs/CLAUDE_MASTER_V1_AUDIT.md.",
     "purpose": "Canonical data source for the offline Android rebuild; not claimed to be the lost original server Master.",
     "confidence_levels": {
       "VERIFIED": "Directly supported by original APK parser/native evidence or independently checked public game data.",
@@ -46,7 +47,8 @@
       ],
       "advantage_multiplier": 2,
       "disadvantage_multiplier": 0.5,
-      "confidence": "VERIFIED"
+      "confidence": "PARTIAL",
+      "note": "Global default only. Production StageData.java uses stage-specific advantage pairs (HAN>WEI, WEI>QUN, QUN>HAN cycles) that are not represented here and conflict with this default; original rule unproven."
     },
     "combo_multiplier_per_extra_combo": 0.25
   },
@@ -89,7 +91,8 @@
       },
       "art_asset_id": null,
       "art_identity_confidence": "UNKNOWN",
-      "confidence": "VERIFIED"
+      "confidence": "PARTIAL",
+      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository."
     },
     {
       "id": "zhao_yun_yijinfeng",
@@ -130,7 +133,8 @@
       },
       "art_asset_id": null,
       "art_identity_confidence": "UNKNOWN",
-      "confidence": "VERIFIED"
+      "confidence": "PARTIAL",
+      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository."
     },
     {
       "id": "zhuge_liang_wolong",
@@ -171,7 +175,8 @@
       },
       "art_asset_id": null,
       "art_identity_confidence": "UNKNOWN",
-      "confidence": "VERIFIED"
+      "confidence": "PARTIAL",
+      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository."
     },
     {
       "id": "lu_bu_zhangui",
@@ -212,7 +217,8 @@
       },
       "art_asset_id": null,
       "art_identity_confidence": "UNKNOWN",
-      "confidence": "VERIFIED"
+      "confidence": "PARTIAL",
+      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository."
     },
     {
       "id": "zhou_yu_xiaobawang",
@@ -254,7 +260,8 @@
       },
       "art_asset_id": null,
       "art_identity_confidence": "UNKNOWN",
-      "confidence": "VERIFIED"
+      "confidence": "PARTIAL",
+      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository."
     },
     {
       "id": "zhang_liang_no64",
@@ -294,7 +301,8 @@
         "type": "Next.5",
         "confidence": "RECONSTRUCTED"
       },
-      "confidence": "VERIFIED"
+      "confidence": "PARTIAL",
+      "identity_note": "card_no recorded; source of stats/skills is not stored in this repository."
     }
   ],
   "stages": [
@@ -616,10 +624,11 @@
           "turn": 2,
           "def": 10,
           "confidence": {
-            "atk": "VERIFIED",
-            "turn": "VERIFIED",
+            "atk": "PARTIAL",
+            "turn": "PARTIAL",
             "hp_def": "RECONSTRUCTED"
-          }
+          },
+          "note": "ATK 20 is anomalously low for this stage and equals the reconstructed stage-1 左慈 ATK; downgraded pending an original source."
         },
         {
           "name": "朱治",
@@ -768,7 +777,8 @@
     "faction_advantage": {
       "advantage": 2,
       "disadvantage": 0.5,
-      "confidence": "VERIFIED"
+      "confidence": "PARTIAL",
+      "note": "See enums.unit_advantage.note (stage-specific pairs)."
     },
     "encounter_seed": {
       "deterministic": true,
@@ -781,7 +791,7 @@
     "enhancement": {
       "coin_cost_formula": "target_level * 100 * material_count",
       "same_faction_growth_multiplier": 1.5,
-      "confidence": "VERIFIED",
+      "confidence": "PARTIAL",
       "low_rarity_material_base_growth": {
         "star1": 100,
         "star2": 200,

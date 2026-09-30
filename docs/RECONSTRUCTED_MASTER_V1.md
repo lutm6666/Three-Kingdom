@@ -33,9 +33,14 @@ rather than inventing an unverifiable "original" payload.
 
 ## v1 contents
 
-- 6 character records with fully verified identity/stat endpoints
+- 6 character records, record-level confidence PARTIAL: five have `card_no: null`
+  (no evidenced link to public card data) and no per-field source is stored in
+  this repository; stat/skill VERIFIED labels are maintainer-attested
 - 3 early Cao Cao route stages
-- enemy ATK/TURN verification flags
+- enemy ATK/TURN verification flags (maintainer-attested; one enemy downgraded
+  to PARTIAL, see `CLAUDE_MASTER_V1_AUDIT.md`)
+- `unit_advantage` / `faction_advantage` are PARTIAL: production stages use
+  stage-specific advantage pairs that differ from the global default
 - explicitly reconstructed HP/DEF, rewards, encounter weighting, and seed/drop defaults
 - 0 verified original-art identity mappings
 
