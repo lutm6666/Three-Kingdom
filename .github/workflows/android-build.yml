@@ -9,6 +9,7 @@ on:
       - 'tools/test_roster_loader.py'
       - 'tools/android_smoke.py'
       - 'tools/verify_battle_save.py'
+      - 'tools/package_tested_apk.py'
       - 'tools/tests/roster/**'
       - '.github/workflows/android-build.yml'
   push:
@@ -20,6 +21,7 @@ on:
       - 'tools/test_roster_loader.py'
       - 'tools/android_smoke.py'
       - 'tools/verify_battle_save.py'
+      - 'tools/package_tested_apk.py'
       - 'tools/tests/roster/**'
       - '.github/workflows/android-build.yml'
 
@@ -95,3 +97,28 @@ jobs:
             cat skill-result.txt
             grep -q 'PASS: heal, delay, conversion, free move, damage, ignore defense, AoE, cooldown, seal, timeout, reset' skill-result.txt
             grep -q 'INSTRUMENTATION_CODE: -1' skill-result.txt
+      - name: Package tested APK and reports
+        env:
+          SOURCE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: python tools/package_tested_apk.py
+      - name: Upload tested Android build
+        id: tested-apk
+        uses: actions/upload-artifact@v7
+        with:
+          name: ThreeKingdom-tested-${{ github.run_number }}-${{ github.run_attempt }}
+          path: tested-apk/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Link tested build
+        env:
+          ARTIFACT_URL: ${{ steps.tested-apk.outputs.artifact-url }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          info = json.loads(Path('tested-apk/build-info.json').read_text())
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('[Download tested Android debug APK](' + os.environ['ARTIFACT_URL'] + ')\n\n')
+              summary.write('Source: `' + info['source_head_sha'] + '`\n\n')
+              summary.write('APK SHA-256: `' + info['apk_sha256'] + '`\n')
+          PY
