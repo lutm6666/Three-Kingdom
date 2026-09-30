@@ -12,5 +12,6 @@ android {
         targetSdk = 37
         versionCode = 26
         versionName = "2.5.0"
+        testInstrumentationRunner = "com.openai.threekingdoms.test.BattleRegression"
     }
 }

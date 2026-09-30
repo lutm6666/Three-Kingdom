@@ -50,7 +50,7 @@ jobs:
           echo "3cf6cd6892e32e2b4c1c39e0f52f5248a2f5b37646fdfbb79a66b46b618414ed  $RUNNER_TEMP/json.jar" | sha256sum --check
           python tools/test_roster_loader.py --json-jar "$RUNNER_TEMP/json.jar"
       - name: Build APK without original art
-        run: bash gradlew --no-daemon :app:assembleDebug
+        run: bash gradlew --no-daemon :app:assembleDebug :app:assembleDebugAndroidTest
       - name: Check packaged Master and DEX
         run: |
           python - <<'PY'
@@ -75,4 +75,13 @@ jobs:
           profile: pixel_2
           emulator-boot-timeout: 300
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
-          script: python tools/android_smoke.py --serial emulator-5554 --apk app/build/outputs/apk/debug/app-debug.apk
+          script: |
+            python tools/android_smoke.py --serial emulator-5554 --apk app/build/outputs/apk/debug/app-debug.apk
+            adb -s emulator-5554 install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            adb -s emulator-5554 shell am instrument -w com.openai.threekingdoms.test/com.openai.threekingdoms.test.BattleRegression > battle-test-result.txt
+            cat battle-test-result.txt
+            grep -q 'PASS: all waves, coins, EXP, unlock, drops, duplicate guard, replay, defeat' battle-test-result.txt
+            grep -q 'INSTRUMENTATION_CODE: -1' battle-test-result.txt
+            adb -s emulator-5554 shell am force-stop com.openai.threekingdoms
+            adb -s emulator-5554 exec-out run-as com.openai.threekingdoms cat shared_prefs/progress.xml > battle-progress.xml
+            python -c 'import xml.etree.ElementTree as E; d={e.attrib["name"]:int(e.attrib["value"]) for e in E.parse("battle-progress.xml").getroot().findall("int")}; assert d["coins"]==140 and d["highest_unlocked_stage"]==1; assert all(d["exp_"+str(i)]==60 for i in range(5)); print("PASS: reward save persisted after process stop")'
