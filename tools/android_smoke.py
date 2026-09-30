@@ -20,9 +20,19 @@ def adb(*cmd):
     return subprocess.check_output(['adb', '-s', args.serial, *cmd], text=True, timeout=40)
 
 def launch():
+    adb('shell', 'input', 'keyevent', 'KEYCODE_WAKEUP')
+    adb('shell', 'wm', 'dismiss-keyguard')
     result = adb('shell', 'am', 'start', '-W', '-n', package + '/.MainActivity')
     assert 'Error:' not in result, result
-    time.sleep(1)
+    # Poll without scrolling: scrolling a not-yet-ready homepage can hide its title.
+    visible = []
+    for _ in range(10):
+        visible = [node.attrib.get('text', '') for node in tree().iter('node')]
+        if '三國志拼圖大戰重建' in visible:
+            return
+        time.sleep(0.5)
+    logs = adb('logcat', '-d', '-s', 'AndroidRuntime:E', 'MasterData:E')
+    raise AssertionError('Homepage did not become ready: ' + repr(visible) + '\n' + logs)
 
 def tree():
     for _ in range(3):

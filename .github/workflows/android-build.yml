@@ -87,3 +87,7 @@ jobs:
             adb -s emulator-5554 shell am force-stop com.openai.threekingdoms
             adb -s emulator-5554 exec-out run-as com.openai.threekingdoms cat shared_prefs/progress.xml > battle-progress.xml
             python tools/verify_battle_save.py battle-test-result.txt battle-progress.xml
+            adb -s emulator-5554 shell am instrument -w -e suite playability com.openai.threekingdoms.test/com.openai.threekingdoms.test.BattleRegression > playability-result.txt
+            cat playability-result.txt
+            grep -q 'PASS: natural-board diagnostic completed' playability-result.txt
+            grep -q 'INSTRUMENTATION_CODE: -1' playability-result.txt
