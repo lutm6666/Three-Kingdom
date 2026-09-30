@@ -91,3 +91,7 @@ jobs:
             cat playability-result.txt
             grep -q 'PASS: natural-board diagnostic completed' playability-result.txt
             grep -q 'INSTRUMENTATION_CODE: -1' playability-result.txt
+            adb -s emulator-5554 shell am instrument -w -e suite skills com.openai.threekingdoms.test/com.openai.threekingdoms.test.BattleRegression > skill-result.txt
+            cat skill-result.txt
+            grep -q 'PASS: heal, delay, conversion, free move, damage, ignore defense, AoE, cooldown, seal, timeout, reset' skill-result.txt
+            grep -q 'INSTRUMENTATION_CODE: -1' skill-result.txt
