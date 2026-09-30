@@ -64,7 +64,18 @@ def click(text, prefix=False):
     time.sleep(0.3)
 
 def prefs(name):
-    return ET.fromstring(adb('exec-out', 'run-as', package, 'cat', 'shared_prefs/'+name+'.xml'))
+    # SharedPreferences.apply() writes asynchronously; the first file may not exist yet.
+    last = ''
+    for _ in range(20):
+        try:
+            last = adb('exec-out', 'run-as', package, 'cat', 'shared_prefs/'+name+'.xml')
+            root = ET.fromstring(last)
+            if root.tag == 'map':
+                return root
+        except (subprocess.SubprocessError, ET.ParseError) as error:
+            last = str(error) + ': ' + last[:300]
+        time.sleep(0.25)
+    raise AssertionError('Cannot read preferences ' + name + ': ' + last[:300])
 
 def ints(root):
     return {n.attrib['name']: int(n.attrib['value']) for n in root.findall('int')}
