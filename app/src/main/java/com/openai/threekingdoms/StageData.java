@@ -317,7 +317,7 @@ public final class StageData {
                 EnemyAction.attack("通常攻擊", 100));
     }
 
-    private static Stage baseStage(
+    static Stage baseStage(
             int id,
             String name,
             String chapter,

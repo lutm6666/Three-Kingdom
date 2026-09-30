@@ -15,6 +15,7 @@ import android.widget.TextView;
 public class MainActivity extends Activity implements PuzzleBoardView.BattleListener {
     private LinearLayout root;
     private String masterLoadError;
+    private String stageMasterLoadError;
     private TextView waveLabel;
     private TextView playerHpLabel;
     private TextView enemyHpLabel;
@@ -36,6 +37,8 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         masterLoadError = ReconstructedMasterData.applyRoster(this);
+        stageMasterLoadError = ReconstructedMasterData.applyStages(this);
+        if (stageMasterLoadError != null) android.util.Log.e("MasterData", stageMasterLoadError);
         if (masterLoadError != null) android.util.Log.e("MasterData", masterLoadError);
         loadTeam();
         showHome();
@@ -332,6 +335,10 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
                         ? Color.rgb(120, 230, 150)
                         : Color.rgb(255, 120, 120)));
 
+        root.addView(text(stageMasterLoadError == null
+                ? "關卡資料載入：成功"
+                : "關卡資料載入失敗（沿用備援）：" + stageMasterLoadError,
+                14f, stageMasterLoadError == null ? Color.LTGRAY : Color.rgb(255, 120, 120)));
         root.addView(text(masterLoadError == null
                 ? "武將資料載入：成功"
                 : "武將資料載入失敗（沿用備援）：" + masterLoadError,

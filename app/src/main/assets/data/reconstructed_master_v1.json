@@ -489,7 +489,8 @@
             "hp_def": "RECONSTRUCTED"
           }
         }
-      ]
+      ],
+      "runtime_stage_id": 0
     },
     {
       "id": "cao_iron_gate_01",
@@ -603,7 +604,8 @@
             "hp_def": "RECONSTRUCTED"
           }
         }
-      ]
+      ],
+      "runtime_stage_id": 1
     },
     {
       "id": "cao_guangzong_01",
@@ -770,7 +772,8 @@
             "hp_def": "RECONSTRUCTED"
           }
         }
-      ]
+      ],
+      "runtime_stage_id": 2
     }
   ],
   "mechanics": {
