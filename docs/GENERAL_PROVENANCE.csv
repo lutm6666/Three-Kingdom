@@ -1,0 +1,131 @@
+general_id,general,field_group,current_gamedata_value,source_url_or_repo_evidence,recommended_provenance,production_action,notes
+0,劉備,name_variant,劉備 / 孝行息子,P: GameData.java:189 rarity literal '重建'; no source for epithet,RECONSTRUCTED,keep,Historical name only; epithet not tied to any card
+0,劉備,faction,蜀,P,RECONSTRUCTED,keep,
+0,劉備,troop_type,劍兵,P,RECONSTRUCTED,keep,
+0,劉備,rarity,重建,P: placeholder string is a provenance label not a rarity,CUSTOM,change,Move label to provenance; rarity should be null/explicit
+0,劉備,max_level,50,P,CUSTOM,keep,Shared default of all placeholders
+0,劉備,lv1_hp_atk_rec,850/160/100,P: GameData.java:190 comment L187 'v1.2 test data',CUSTOM,keep,
+0,劉備,lvmax_hp_atk_rec,3545/748/350,P,CUSTOM,keep,
+0,劉備,active_skill_name,仁德,P,CUSTOM,keep,
+0,劉備,active_skill_description,暫定測試技能,P: self-declared placeholder,CUSTOM,keep,
+0,劉備,active_skill_cooldown,HEAL 900 / CD 4 (min 4),P,CUSTOM,keep,
+0,劉備,leader_skill_name,漢室仁德（暫定）,P: self-declared provisional,CUSTOM,keep,
+0,劉備,leader_skill_description,全隊最大生命 ×1.20,P,CUSTOM,keep,
+0,劉備,leader_skill_effect,HP x1.20 all members,P: GameData.java:137 (gated by !verifiedOriginal),CUSTOM,keep,Gameplay tied to provenance flag; see audit MD Regression risk
+1,關羽,name_variant,關羽 / 美髯公,A. Repo: reconstructed_master_v1.json:58-95 card_no null and identity_note 'link to public card data is not evidenced'. DropCardData.java:255 asserts No.180 = 〖美髯公〗 but cites no URL. Card index https://3pz.fandom.com/zh/wiki/%E6%AD%A6%E5%B0%86%E5%9B%BE%E9%89%B4 (unreadable),UNRESOLVED,change (downgrade to RECONSTRUCTED),Only a repo-internal claim (No.180); needs a public card page read
+1,關羽,faction,蜀,A,UNRESOLVED,keep (provenance RECONSTRUCTED),DropCardData.java:255 marks a different low-star 關羽 (No.80) faction as calibrated; not this card
+1,關羽,troop_type,槍兵,A,UNRESOLVED,keep (provenance RECONSTRUCTED),DropCardData.java:250-258 leaves No.80 troop type -1/unknown
+1,關羽,rarity,★★★★★★,A,UNRESOLVED,change (normalize scale),Star notation inconsistent across roster
+1,關羽,max_level,99,A,UNRESOLVED,keep (provenance RECONSTRUCTED),Only card with 99; others 50
+1,關羽,lv1_hp_atk_rec,520/300/60,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+1,關羽,lvmax_hp_atk_rec,3208/1230/191,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+1,關羽,active_skill_name,青龍咆哮,A. Search snippet only: other card 【軍神】關羽 reportedly has 武神咆哮 (https://3pz.fandom.com/zh/wiki/%E3%80%90%E8%BB%8D%E7%A5%9E%E3%80%91%E9%96%A2%E7%BE%BD) - different card so neither confirms nor conflicts,UNRESOLVED,keep (provenance RECONSTRUCTED),
+1,關羽,active_skill_description,使用武將攻擊力50倍的「蜀」攻擊,A,UNRESOLVED,keep (provenance RECONSTRUCTED),Chinese rendering; original JP wording unconfirmed
+1,關羽,active_skill_cooldown,SELF_ATK 50 aux SHU / CD 30 (min 20),A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+1,關羽,leader_skill_name,義侠の武,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+1,關羽,leader_skill_description,敵方「蜀」武將造成的傷害減半,A,UNRESOLVED,keep (provenance RECONSTRUCTED),Semantics odd for a Shu leader (Shu enemies) - verify wording
+1,關羽,leader_skill_effect,incoming x0.5 vs SHU enemies,A: GameData.java:176 (not gated by provenance),UNRESOLVED,keep effect (provenance RECONSTRUCTED),Effect is not provenance-gated; safe on downgrade
+2,張飛,name_variant,張飛 / 闘鬼,P,RECONSTRUCTED,keep,
+2,張飛,faction,蜀,P,RECONSTRUCTED,keep,
+2,張飛,troop_type,蠻兵,P,RECONSTRUCTED,keep,
+2,張飛,rarity,重建,P,CUSTOM,change,
+2,張飛,max_level,50,P,CUSTOM,keep,
+2,張飛,lv1_hp_atk_rec,1050/225/80,P,CUSTOM,keep,
+2,張飛,lvmax_hp_atk_rec,3500/900/240,P,CUSTOM,keep,
+2,張飛,active_skill_name,長坂怒吼,P,CUSTOM,keep,
+2,張飛,active_skill_description,暫定測試技能,P,CUSTOM,keep,
+2,張飛,active_skill_cooldown,DELAY 2 / CD 5 (min 5),P,CUSTOM,keep,
+2,張飛,leader_skill_name,燕人之勇（暫定）,P,CUSTOM,keep,
+2,張飛,leader_skill_description,蜀勢力傷害 ×1.25,P,CUSTOM,keep,
+2,張飛,leader_skill_effect,SHU attackers x1.25,P: GameData.java:153-158 (gated by !verifiedOriginal),CUSTOM,keep,
+3,趙雲,name_variant,趙雲 / 一陣の風,A. Search-result title of a public card: 【長坂単騎駆】趙雲 https://3pz.fandom.com/zh/wiki/%E3%80%90%E9%95%B7%E5%9D%82%E5%8D%98%E9%A8%8E%E9%A7%86%E3%80%91%E8%B6%99%E9%9B%B2 (body unreadable). Epithet differs from 一陣の風; may be a different card,UNRESOLVED,change (downgrade to RECONSTRUCTED),Possible conflict - unresolved
+3,趙雲,faction,蜀,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+3,趙雲,troop_type,騎兵,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+3,趙雲,rarity,★★★★★☆,A,UNRESOLVED,change (normalize scale),
+3,趙雲,max_level,50,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+3,趙雲,lv1_hp_atk_rec,280/249/59,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+3,趙雲,lvmax_hp_atk_rec,1260/872/177,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+3,趙雲,active_skill_name,長坂一騎駆け,A: name resembles the 【長坂単騎駆】 card title but that is a naming similarity only,UNRESOLVED,keep (provenance RECONSTRUCTED),Pattern inference = LOW
+3,趙雲,active_skill_description,10秒間自由移動單位,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+3,趙雲,active_skill_cooldown,FREE_MOVE 10 / CD 20 (min 14),A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+3,趙雲,leader_skill_name,神威に至る槍術,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+3,趙雲,leader_skill_description,單位移動時間大幅延長；受到的傷害大幅減少,A,UNRESOLVED,keep (provenance RECONSTRUCTED),Qualitative only
+3,趙雲,leader_skill_effect,none implemented,A: GameData.java:177 comment 'exact multiplier not found',UNRESOLVED,keep (no effect),Do not invent a multiplier
+4,諸葛亮,name_variant,諸葛亮 / 臥龍雌伏,A. Search-result title of a public card: 【三顧の禮】諸葛亮 https://3pz.fandom.com/zh/wiki/%E3%80%90%E4%B8%89%E9%A1%A7%E3%81%AE%E7%A4%BC%E3%80%91%E8%AB%B8%E8%91%9B%E4%BA%AE (body unreadable). Epithet differs,UNRESOLVED,change (downgrade to RECONSTRUCTED),Possible conflict - unresolved
+4,諸葛亮,faction,蜀,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+4,諸葛亮,troop_type,神算,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+4,諸葛亮,rarity,★★★★☆☆,A,UNRESOLVED,change (normalize scale),4 filled of 6 vs other cards' notation
+4,諸葛亮,max_level,50,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+4,諸葛亮,lv1_hp_atk_rec,287/264/53,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+4,諸葛亮,lvmax_hp_atk_rec,718/554/111,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+4,諸葛亮,active_skill_name,奇門遁甲,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+4,諸葛亮,active_skill_description,將「魏」單位轉換為「蜀」單位,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+4,諸葛亮,active_skill_cooldown,CONVERT WEI->SHU / CD 10 (min 5),A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+4,諸葛亮,leader_skill_name,八卦陣,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+4,諸葛亮,leader_skill_description,我方「蜀」武將 HP ×1.5,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+4,諸葛亮,leader_skill_effect,HP x1.5 for SHU members,A: GameData.java:136 (not gated),UNRESOLVED,keep (provenance RECONSTRUCTED),But GameData.java:160 gives a combo>=4 x1.20 damage bonus under !verifiedOriginal that is not in the description - see audit MD
+5,曹操,name_variant,曹操 / 東郡太守,P,RECONSTRUCTED,keep,
+5,曹操,faction,魏,P,RECONSTRUCTED,keep,
+5,曹操,troop_type,劍兵,P,RECONSTRUCTED,keep,
+5,曹操,rarity,重建,P,CUSTOM,change,
+5,曹操,max_level,50,P,CUSTOM,keep,
+5,曹操,lv1_hp_atk_rec,920/235/70,P,CUSTOM,keep,
+5,曹操,lvmax_hp_atk_rec,3600/980/220,P,CUSTOM,keep,
+5,曹操,active_skill_name,魏武之威,P,CUSTOM,keep,
+5,曹操,active_skill_description,暫定測試技能,P,CUSTOM,keep,
+5,曹操,active_skill_cooldown,DAMAGE 1050 / CD 5 (min 5),P,CUSTOM,keep,
+5,曹操,leader_skill_name,魏武霸業（暫定）,P,CUSTOM,keep,
+5,曹操,leader_skill_description,魏勢力傷害 ×1.30,P,CUSTOM,keep,
+5,曹操,leader_skill_effect,WEI attackers x1.30,P: GameData.java:161-162,CUSTOM,keep,
+6,孫權,name_variant,孫權 / 若き虎の覚悟,P,RECONSTRUCTED,keep,
+6,孫權,faction,吳,P,RECONSTRUCTED,keep,
+6,孫權,troop_type,劍兵,P,RECONSTRUCTED,keep,
+6,孫權,rarity,重建,P,CUSTOM,change,
+6,孫權,max_level,50,P,CUSTOM,keep,
+6,孫權,lv1_hp_atk_rec,940/200/90,P,CUSTOM,keep,
+6,孫權,lvmax_hp_atk_rec,3550/900/300,P,CUSTOM,keep,
+6,孫權,active_skill_name,江東固守,P,CUSTOM,keep,
+6,孫權,active_skill_description,暫定測試技能,P,CUSTOM,keep,
+6,孫權,active_skill_cooldown,HEAL 750 / CD 4 (min 4),P,CUSTOM,keep,
+6,孫權,leader_skill_name,江東基業（暫定）,P,CUSTOM,keep,
+6,孫權,leader_skill_description,吳勢力傷害 ×1.30,P,CUSTOM,keep,
+6,孫權,leader_skill_effect,WU attackers x1.30,P: GameData.java:163-164,CUSTOM,keep,
+7,呂布,name_variant,呂布 / 戦鬼,A. Repo: reconstructed_master_v1.json:183-221 card_no null. No public card title for this epithet found in search results,UNRESOLVED,change (downgrade to RECONSTRUCTED),
+7,呂布,faction,群,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+7,呂布,troop_type,騎兵,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+7,呂布,rarity,★★★★★★☆,A,UNRESOLVED,change (normalize scale),7 symbols unlike others; scale ambiguous
+7,呂布,max_level,50,A,UNRESOLVED,keep (provenance RECONSTRUCTED),Same 50 as 5-star cards while rarity is highest
+7,呂布,lv1_hp_atk_rec,341/277/22,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+7,呂布,lvmax_hp_atk_rec,1705/970/176,A,UNRESOLVED,keep (provenance RECONSTRUCTED),Lv1->Max recovery x8 vs HP x5 - unusual; verify
+7,呂布,active_skill_name,天下無双,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+7,呂布,active_skill_description,敵單體受到使用武將攻擊力30倍的無視防禦攻擊,A,UNRESOLVED,keep (provenance RECONSTRUCTED),Defense-ignore is not evidenced by skillType SELF_ATK - verify engine
+7,呂布,active_skill_cooldown,SELF_ATK 30 aux QUN / CD 35 (min 35),A,UNRESOLVED,keep (provenance RECONSTRUCTED),CD == min: no reducible range - suspicious
+7,呂布,leader_skill_name,吠虎の猛勇,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+7,呂布,leader_skill_description,HP全滿時，全武將攻擊力 ×3.5,A,UNRESOLVED,keep (provenance RECONSTRUCTED),Multiplier 3.5 unsourced
+7,呂布,leader_skill_effect,ATK x3.5 at full HP,A: GameData.java:146-148 (not gated),UNRESOLVED,keep (provenance RECONSTRUCTED),Not gated - unaffected by downgrade
+8,貂蟬,name_variant,貂蟬 / 美女連環,P,RECONSTRUCTED,keep,
+8,貂蟬,faction,群,P,RECONSTRUCTED,keep,
+8,貂蟬,troop_type,鬼謀,P,RECONSTRUCTED,keep,
+8,貂蟬,rarity,重建,P,CUSTOM,change,
+8,貂蟬,max_level,50,P,CUSTOM,keep,
+8,貂蟬,lv1_hp_atk_rec,730/175/120,P,CUSTOM,keep,
+8,貂蟬,lvmax_hp_atk_rec,2500/800/420,P,CUSTOM,keep,
+8,貂蟬,active_skill_name,閉月,P,CUSTOM,keep,
+8,貂蟬,active_skill_description,暫定測試技能,P,CUSTOM,keep,
+8,貂蟬,active_skill_cooldown,HEAL 1000 / CD 5 (min 5),P,CUSTOM,keep,
+8,貂蟬,leader_skill_name,傾城（暫定）,P,CUSTOM,keep,
+8,貂蟬,leader_skill_description,桃回復量 ×1.50,P,CUSTOM,keep,
+8,貂蟬,leader_skill_effect,heal x1.50,P: GameData.java:182,CUSTOM,keep,
+9,周瑜,name_variant,周瑜 / 小覇王盟友,A. Repo: reconstructed_master_v1.json:225-264 card_no null. No public card title found in search results,UNRESOLVED,change (downgrade to RECONSTRUCTED),
+9,周瑜,faction,吳,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+9,周瑜,troop_type,鬼謀,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+9,周瑜,rarity,★★★★★☆,A,UNRESOLVED,change (normalize scale),
+9,周瑜,max_level,50,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+9,周瑜,lv1_hp_atk_rec,320/291/76,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+9,周瑜,lvmax_hp_atk_rec,1280/1019/243,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+9,周瑜,active_skill_name,孫呉の業火,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+9,周瑜,active_skill_description,敵全體受到部隊「吳」攻擊力8倍的攻擊,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+9,周瑜,active_skill_cooldown,TEAM_FACTION_ATK 8 aux WU / CD 28 (min 15),A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+9,周瑜,leader_skill_name,借刀殺人の計,A,UNRESOLVED,keep (provenance RECONSTRUCTED),
+9,周瑜,leader_skill_description,攻擊後進行強力再攻擊；鬼謀武將攻擊力 ×2.2,A,UNRESOLVED,keep (provenance RECONSTRUCTED),Mixes a qualitative follow-up attack with a numeric x2.2; only the latter is implemented
+9,周瑜,leader_skill_effect,GUI_MOU attackers x2.2,A: GameData.java:149-151 (not gated),UNRESOLVED,keep (provenance RECONSTRUCTED),Follow-up attack not implemented; 2.2 unsourced
