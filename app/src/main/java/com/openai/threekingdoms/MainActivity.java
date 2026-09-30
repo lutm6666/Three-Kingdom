@@ -34,6 +34,8 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String masterError = ReconstructedMasterData.applyRoster(this);
+        if (masterError != null) android.util.Log.e("MasterData", masterError);
         loadTeam();
         showHome();
     }
