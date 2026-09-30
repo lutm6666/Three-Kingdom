@@ -316,6 +316,72 @@ public final class ReconstructedMasterData {
         }
     }
 
+    /** Stage bindings are offline save IDs. Keep combat AI and compatibility flags stable. */
+    public static String applyStages(Context context) {
+        try {
+            Summary summary = loadSummary(context);
+            if (!summary.valid) throw new IllegalStateException(summary.error);
+            JSONArray rows = new JSONObject(readAsset(context, ASSET_PATH)).getJSONArray("stages");
+            StageData.Stage[] next = StageData.STAGES.clone();
+            Set<Integer> matched = new HashSet<>();
+            String[] keys = {"cao_yellow_turban_01", "cao_iron_gate_01", "cao_guangzong_01"};
+            for (int i = 0; i < rows.length(); i++) {
+                JSONObject row = rows.getJSONObject(i);
+                int id = nonnegative(row, "runtime_stage_id");
+                if (id >= next.length || !matched.add(id))
+                    throw new IllegalStateException("invalid stage binding: " + id);
+                StageData.Stage old = next[id];
+                if (!keys[id].equals(row.getString("id")) || !old.name.equals(row.getString("name"))
+                        || !old.chapter.equals(row.getString("chapter")))
+                    throw new IllegalStateException("stage identity mismatch: " + id);
+                JSONObject rule = row.getJSONObject("encounter_rule");
+                if (!"equal".equals(rule.getString("weighting")))
+                    throw new IllegalStateException("unsupported encounter weighting");
+                StageData.Enemy[] pool = stageEnemies(row.getJSONArray("common_pool"), old.commonPool.enemies);
+                StageData.Enemy[] boss = stageEnemies(row.getJSONArray("boss_wave"), old.fixedBossWave.enemies);
+                int min = positive(rule, "min_enemies"), max = positive(rule, "max_enemies");
+                if (min > max || max > pool.length) throw new IllegalStateException("invalid encounter range");
+                JSONArray composition = row.getJSONObject("composition").getJSONArray("fixed_boss_wave");
+                if (composition.length() != boss.length) throw new IllegalStateException("boss composition mismatch");
+                for (int j = 0; j < boss.length; j++)
+                    if (!boss[j].name.equals(composition.getString(j)))
+                        throw new IllegalStateException("boss composition mismatch");
+                int waves = positive(row, "wave_count");
+                if (waves > 100) throw new IllegalStateException("too many waves");
+                JSONObject rewards = row.getJSONObject("rewards");
+                next[id] = StageData.baseStage(id, old.name, old.chapter,
+                        positive(row, "difficulty"), positive(row, "stamina"),
+                        nonnegative(rewards, "coin"), nonnegative(rewards, "exp"),
+                        old.sourceNote, old.advantagePairs, waves,
+                        new StageData.EncounterPool(pool, min, max, old.commonPool.note),
+                        new StageData.Wave(boss));
+            }
+            if (matched.size() != next.length) throw new IllegalStateException("missing stage row");
+            System.arraycopy(next, 0, StageData.STAGES, 0, next.length);
+            return null;
+        } catch (Exception e) {
+            return e.getClass().getSimpleName() + ": " + e.getMessage();
+        }
+    }
+
+    private static StageData.Enemy[] stageEnemies(JSONArray rows, StageData.Enemy[] old) throws Exception {
+        if (rows.length() != old.length) throw new IllegalStateException("enemy count mismatch");
+        StageData.Enemy[] next = new StageData.Enemy[old.length];
+        for (int i = 0; i < old.length; i++) {
+            JSONObject row = rows.getJSONObject(i);
+            StageData.Enemy prior = old[i];
+            if (!prior.name.equals(row.getString("name"))
+                    || !GameData.factionKey(prior.faction).equals(row.getString("faction")))
+                throw new IllegalStateException("enemy identity mismatch: " + prior.name);
+            // Confidence metadata is research provenance, not permission to change combat semantics.
+            next[i] = new StageData.Enemy(prior.name, positive(row, "hp"),
+                    nonnegative(row, "atk"), positive(row, "turn"), prior.faction,
+                    nonnegative(row, "def"), prior.attackVerified, prior.turnVerified,
+                    prior.hpDefenseVerified, prior.preemptive, prior.actions);
+        }
+        return next;
+    }
+
     private static int nonnegative(JSONObject row, String key) throws Exception {
         Object raw = row.get(key);
         if (!(raw instanceof Number)) throw new IllegalStateException("non-numeric " + key);

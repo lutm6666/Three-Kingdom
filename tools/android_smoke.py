@@ -77,6 +77,7 @@ launch()
 find(lambda n: n.attrib.get('text') == '三國志拼圖大戰重建')
 click('Master 資料核心')
 find(lambda n: n.attrib.get('text') == '武將資料載入：成功')
+find(lambda n: n.attrib.get('text') == '關卡資料載入：成功')
 click('返回首頁')
 click('隊伍編成')
 click('【已上陣】 關羽', prefix=True)  # swaps default leader with slot 2

@@ -15,7 +15,7 @@ root = Path(__file__).resolve().parent.parent
 sources = list((root / 'tools/tests/roster').rglob('*.java'))
 package = root / 'app/src/main/java/com/openai/threekingdoms'
 sources += [package / f'{name}.java' for name in
-            ('DataProvenance', 'GameData', 'ReconstructedMasterData')]
+            ('DataProvenance', 'GameData', 'ReconstructedMasterData', 'StageData')]
 with tempfile.TemporaryDirectory() as output:
     compiler = (['java', '-jar', str(Path(args.compiler_jar).resolve()), '-17', '-proc:none']
                 if args.compiler_jar else ['javac', '--release', '17'])
