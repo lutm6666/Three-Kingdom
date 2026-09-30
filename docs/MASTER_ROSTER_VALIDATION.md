@@ -34,3 +34,16 @@ proxy, but stopped because the installed Java runtime lacks javac. This is
 not reported as a Gradle build pass. `android-build.yml` supplies a full JDK 17
 and runs the standard Gradle build plus roster tests for relevant PR changes.
 Its current run result must be checked separately.
+
+## Standard CI build result
+
+Commit `4a41b6181a749354a49f42eaa0ea6c0119b30329` passed both checks:
+
+- Android build and roster regression, run `36732513640`: SUCCESS. Full JDK 17
+  roster tests, standard Gradle `:app:assembleDebug`, and packaged Master/DEX
+  assertions all completed successfully.
+- Validate reconstructed master, run `36732513787`: SUCCESS.
+
+The first CI attempt failed because setup-android defaulted to the removed
+legacy `tools` package. Explicit `packages: platform-tools` fixed setup.
+Device launch/battle/save checks remain pending; CI success does not replace them.
