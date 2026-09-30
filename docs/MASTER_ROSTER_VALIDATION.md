@@ -47,3 +47,18 @@ Commit `4a41b6181a749354a49f42eaa0ea6c0119b30329` passed both checks:
 The first CI attempt failed because setup-android defaulted to the removed
 legacy `tools` package. Explicit `packages: platform-tools` fixed setup.
 Device launch/battle/save checks remain pending; CI success does not replace them.
+
+## Emulator regression result
+
+Commit `bd0374e49cbcad9f966eed22bc92c437dcecb718` passed Android build and
+roster regression run `36736474080`, including an Android 35 x86_64 emulator.
+The log confirms `Emulator booted` and the full UI script PASS:
+launch, canonical load status, team swap, battle drag, process restart, saved
+team, and legacy level cap. The raw saved level 150 remained intact while
+關羽's gameplay/UI level was capped at 99. No fatal runtime or Master load
+error was found in the filtered Logcat check. Master validation run
+`36736474079` also passed.
+
+This is emulator validation, not a physical-device or complete game-playthrough
+test. It verifies one battle drag, not victory/reward/drop outcomes. Prior
+pending device statements above describe earlier stages of the work.
