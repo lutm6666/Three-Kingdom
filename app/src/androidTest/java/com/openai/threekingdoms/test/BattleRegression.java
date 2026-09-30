@@ -24,8 +24,10 @@ public final class BattleRegression extends Instrumentation {
     private Throwable failure;
     private StageData.Stage stage;
 
-    @Override public void onCreate(Bundle arguments) { super.onCreate(arguments); start(); }
+    private boolean probe;
+    @Override public void onCreate(Bundle arguments) { super.onCreate(arguments); probe=arguments != null && "playability".equals(arguments.getString("suite")); start(); }
     @Override public void onStart() {
+        if (probe) { new PlayabilityProbe(this).run(); return; }
         Bundle result = new Bundle();
         try {
             Context target = getTargetContext();
