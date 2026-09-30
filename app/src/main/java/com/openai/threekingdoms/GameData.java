@@ -239,6 +239,35 @@ public final class GameData {
 
     private GameData() {}
 
+    // Offline save IDs selected for this numeric migration, not original game IDs.
+    public static boolean usesMasterData(int id) {
+        return id == 1 || id == 3 || id == 4 || id == 7 || id == 9;
+    }
+
+    public static String factionKey(int faction) {
+        switch (faction) {
+            case WEI: return "WEI";
+            case WU: return "WU";
+            case SHU: return "SHU";
+            case HAN: return "HAN";
+            case QUN: return "QUN";
+            default: throw new IllegalArgumentException("unknown faction: " + faction);
+        }
+    }
+
+    public static String troopTypeKey(int troopType) {
+        switch (troopType) {
+            case SWORD: return "SWORD";
+            case CAVALRY: return "CAVALRY";
+            case SPEAR: return "SPEAR";
+            case BOW: return "BOW";
+            case BARBARIAN: return "BARBARIAN";
+            case GUI_MOU: return "GUI_MOU";
+            case SHEN_SUAN: return "SHEN_SUAN";
+            default: throw new IllegalArgumentException("unknown troop: " + troopType);
+        }
+    }
+
     public static String factionName(int faction) {
         switch (faction) {
             case WEI: return "魏";

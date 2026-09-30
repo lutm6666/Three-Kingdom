@@ -92,7 +92,8 @@
       "art_asset_id": null,
       "art_identity_confidence": "UNKNOWN",
       "confidence": "PARTIAL",
-      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository."
+      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository.",
+      "runtime_roster_id": 1
     },
     {
       "id": "zhao_yun_yijinfeng",
@@ -134,7 +135,8 @@
       "art_asset_id": null,
       "art_identity_confidence": "UNKNOWN",
       "confidence": "PARTIAL",
-      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository."
+      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository.",
+      "runtime_roster_id": 3
     },
     {
       "id": "zhuge_liang_wolong",
@@ -176,7 +178,8 @@
       "art_asset_id": null,
       "art_identity_confidence": "UNKNOWN",
       "confidence": "PARTIAL",
-      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository."
+      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository.",
+      "runtime_roster_id": 4
     },
     {
       "id": "lu_bu_zhangui",
@@ -218,7 +221,8 @@
       "art_asset_id": null,
       "art_identity_confidence": "UNKNOWN",
       "confidence": "PARTIAL",
-      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository."
+      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository.",
+      "runtime_roster_id": 7
     },
     {
       "id": "zhou_yu_xiaobawang",
@@ -261,7 +265,8 @@
       "art_asset_id": null,
       "art_identity_confidence": "UNKNOWN",
       "confidence": "PARTIAL",
-      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository."
+      "identity_note": "card_no not recorded; link to public card data is not evidenced in this repository.",
+      "runtime_roster_id": 9
     },
     {
       "id": "zhang_liang_no64",
@@ -302,7 +307,8 @@
         "confidence": "RECONSTRUCTED"
       },
       "confidence": "PARTIAL",
-      "identity_note": "card_no recorded; source of stats/skills is not stored in this repository."
+      "identity_note": "card_no recorded; source of stats/skills is not stored in this repository.",
+      "runtime_roster_id": null
     }
   ],
   "stages": [

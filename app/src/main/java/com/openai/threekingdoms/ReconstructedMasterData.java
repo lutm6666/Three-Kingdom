@@ -262,6 +262,76 @@ public final class ReconstructedMasterData {
         }
     }
 
+    /** Apply numeric endpoints atomically; legacy IDs and skill execution stay stable. */
+    public static String applyRoster(Context context) {
+        try {
+            Summary summary = loadSummary(context);
+            if (!summary.valid) throw new IllegalStateException(summary.error);
+            JSONObject root = new JSONObject(readAsset(context, ASSET_PATH));
+            JSONArray rows = root.getJSONArray("characters");
+            GameData.General[] next = GameData.ROSTER.clone();
+            Set<Integer> matched = new HashSet<>();
+            for (int i = 0; i < rows.length(); i++) {
+                JSONObject row = rows.getJSONObject(i);
+                if (!row.has("runtime_roster_id"))
+                    throw new IllegalStateException("missing runtime binding: " + row.getString("id"));
+                // Research-only rows explicitly have no offline save ID.
+                if (row.isNull("runtime_roster_id")) continue;
+                int index = nonnegative(row, "runtime_roster_id");
+                if (index >= next.length || !GameData.usesMasterData(index))
+                    throw new IllegalStateException("unsupported roster binding: " + index);
+                if (!matched.add(index)) throw new IllegalStateException("duplicate roster mapping");
+                GameData.General old = next[index];
+                if (!old.name.equals(row.getString("name"))
+                        || !old.sourceVariant.equals(row.getString("variant")))
+                    throw new IllegalStateException("roster identity mismatch: " + old.id);
+                if (!GameData.factionKey(old.faction).equals(row.getString("faction"))
+                        || !GameData.troopTypeKey(old.troopType).equals(row.getString("troop_type")))
+                    throw new IllegalStateException("roster enum mismatch: " + old.id);
+                JSONObject stats = row.getJSONObject("stats");
+                JSONObject low = stats.getJSONObject("lv1");
+                JSONObject high = stats.getJSONObject("max");
+                JSONObject skill = row.getJSONObject("active_skill");
+                if (!old.skillName.equals(skill.getString("name")))
+                    throw new IllegalStateException("unsupported skill change: " + old.id);
+                JSONObject cd = skill.getJSONObject("cooldown");
+                int base = positive(cd, "base");
+                int min = positive(cd, "min");
+                if (min > base) throw new IllegalStateException("invalid cooldown range");
+                next[index] = new GameData.General(old.id, old.name, old.faction, old.troopType,
+                        old.sourceVariant, old.provenance, old.rarity, positive(row, "max_level"),
+                        positive(low, "hp"), positive(low, "atk"), nonnegative(low, "recovery"),
+                        positive(high, "hp"), positive(high, "atk"), nonnegative(high, "recovery"),
+                        old.skillName, old.skillDescription, old.skillType, old.skillValue,
+                        old.skillAux, base, min, old.leaderName, old.leaderDescription);
+            }
+            for (int id = 0; id < next.length; id++) {
+                if (GameData.usesMasterData(id) && !matched.contains(id))
+                    throw new IllegalStateException("missing playable roster row: " + id);
+            }
+            System.arraycopy(next, 0, GameData.ROSTER, 0, next.length);
+            return null;
+        } catch (Exception e) {
+            return e.getClass().getSimpleName() + ": " + e.getMessage();
+        }
+    }
+
+    private static int nonnegative(JSONObject row, String key) throws Exception {
+        Object raw = row.get(key);
+        if (!(raw instanceof Number)) throw new IllegalStateException("non-numeric " + key);
+        double value = ((Number) raw).doubleValue();
+        if (Double.isNaN(value) || Double.isInfinite(value)
+                || value < 0 || value > Integer.MAX_VALUE || value != Math.rint(value))
+            throw new IllegalStateException("invalid integer " + key);
+        return (int) value;
+    }
+
+    private static int positive(JSONObject row, String key) throws Exception {
+        int value = nonnegative(row, key);
+        if (value == 0) throw new IllegalStateException("zero " + key);
+        return value;
+    }
+
     private static void validateConfidence(
             String confidence) {
         if ("VERIFIED".equals(confidence)

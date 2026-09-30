@@ -1,3 +1,4 @@
+# Legacy alternative draft-schema verifier. Active runtime gate is validate_reconstructed_master.ps1.
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $jsonPath = Join-Path $root 'app\src\main\assets\data\master_reconstruction_v1.json'
