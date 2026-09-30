@@ -37,17 +37,27 @@ public final class BattleRegression extends Instrumentation {
             activity = (MainActivity) startActivitySync(new Intent(target, MainActivity.class)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             waitForIdleSync();
-            for (long encounterSeed=0; encounterSeed<100; encounterSeed++) {
-                StageData.Stage candidate = StageData.materializeRun(StageData.get(0), encounterSeed);
-                if (DropData.roll(candidate).length > 0) { stage=candidate; break; }
+            StageData.Stage[] fixtures = new StageData.Stage[3];
+            int[] coins = {70, 340, 470}, experience = {30, 190, 340};
+            for (int index=0; index<fixtures.length; index++) {
+                check(StageData.get(index).coinReward == coins[index]
+                        && StageData.get(index).expReward == experience[index], "Master reward mismatch");
+                for (long encounterSeed=0; encounterSeed<100; encounterSeed++) {
+                    StageData.Stage candidate = StageData.materializeRun(StageData.get(index), encounterSeed);
+                    if (DropData.roll(candidate).length > 0) { fixtures[index]=candidate; break; }
+                }
+                check(fixtures[index] != null, "could not select drop fixture for stage " + index);
             }
-            check(stage != null, "could not select a nonempty deterministic drop fixture");
             Map<String,Integer> drops = new HashMap<>();
-            for (DropData.Item item : DropData.roll(stage)) drops.put(item.id, drops.getOrDefault(item.id,0)+1);
-            for (int run=1; run<=2; run++) {
+            int expectedCoins=0, totalExp=0, highest=0;
+            // Clear each stage in order, then replay earlier stages after all are unlocked.
+            for (int run=0; run<6; run++) {
+                int index=run%3;
+                stage=fixtures[index];
                 startBattle();
                 PuzzleBoardView board = (PuzzleBoardView) get(activity, "board");
-                for (int turn=0;turn<40 && !(Boolean)get(board,"victory");turn++) {
+                int previousWave=0;
+                for (int turn=0;turn<80 && !(Boolean)get(board,"victory");turn++) {
                     main(() -> {
                         int[][] cells=(int[][])get(board,"board");
                         for (int[] row:cells) java.util.Arrays.fill(row, GameData.SHU);
@@ -55,42 +65,64 @@ public final class BattleRegression extends Instrumentation {
                         touch(board);
                     });
                     waitForIdleSync();
-                    check(!(Boolean)get(board,"gameOver"), "party lost during seeded victory fixture");
+                    check(!(Boolean)get(board,"gameOver"), "party lost at stage " + index);
+                    int wave=(Integer)get(board,"waveIndex");
+                    check(wave == previousWave || wave == previousWave+1, "skipped a wave at stage " + index);
+                    previousWave=wave;
                 }
-                check((Boolean)get(board,"victory"), "did not clear all waves");
-                check((Integer)get(board,"waveIndex") == stage.waveCount-1, "skipped a wave");
+                check((Boolean)get(board,"victory"), "did not clear stage " + index);
+                check(previousWave == stage.waveCount-1, "not all waves cleared");
                 main(() -> check(hasText(activity.getWindow().getDecorView(), "通關獎勵"), "result screen missing"));
-                check(PlayerData.getCoins(activity)==run*stage.coinReward,"coin amount mismatch");
+                expectedCoins += coins[index];
+                totalExp += experience[index];
+                check(PlayerData.getCoins(activity)==expectedCoins,"coin amount mismatch at stage " + index);
+                int level=10, exp=totalExp;
+                // Independent expected progression for the reconstructed EXP curve.
+                while (exp >= 100+(level-1)*40) { exp -= 100+(level-1)*40; level++; }
                 for (int id:GameData.defaultTeam()) {
-                    check(PlayerData.getLevel(activity,id)==10,"unexpected level change");
-                    check(PlayerData.getExp(activity,id)==run*stage.expReward,"EXP amount mismatch");
+                    check(PlayerData.getLevel(activity,id)==level,"level amount mismatch");
+                    check(PlayerData.getExp(activity,id)==exp,"EXP remainder mismatch");
                 }
-                check(PlayerData.getHighestUnlockedStage(activity)==1,"next stage not unlocked");
+                highest=Math.max(highest, Math.min(index+1, fixtures.length-1));
+                check(PlayerData.getHighestUnlockedStage(activity)==highest,"unlock regressed or exceeded final stage");
+                for (DropData.Item item : DropData.roll(stage))
+                    drops.put(item.id, drops.getOrDefault(item.id,0)+1);
                 for (DropData.Item item:DropData.ITEMS)
-                    check(PlayerData.getLootCount(activity,item.id)==run*drops.getOrDefault(item.id,0),"drop mismatch: "+item.id);
+                    check(PlayerData.getLootCount(activity,item.id)==drops.getOrDefault(item.id,0),"drop mismatch: "+item.id);
                 Map<String,?> once=new HashMap<>(progress.getAll());
-                // Duplicate completion notification after an actual win must not pay twice.
                 main(() -> activity.onBattleResolved(stage.waveCount,"duplicate",0,1,1,1,0,0,0,0,
                         new int[5],new int[5],0,true,true,false,"duplicate"));
                 waitForIdleSync();
                 check(once.equals(progress.getAll()),"duplicate callback granted rewards twice");
+                android.util.Log.i("BattleRegression", "PASS: stage " + index + " run " + (run/3+1)
+                        + " waves=" + stage.waveCount + " coins=" + expectedCoins + " level=" + level + " exp=" + exp);
             }
-            Map<String,?> beforeLoss=new HashMap<>(progress.getAll());
-            startBattle();
-            PuzzleBoardView board=(PuzzleBoardView)get(activity,"board");
-            main(() -> {
-                set(board,"playerHp",1);
-                java.util.Arrays.fill((int[])get(board,"enemyTurnsRemaining"),1);
-                int[][] cells=(int[][])get(board,"board");
-                for (int r=0;r<cells.length;r++) for (int c=0;c<cells[r].length;c++) cells[r][c]=(r+c)%5;
-                touch(board);
-            });
-            waitForIdleSync();
-            check((Boolean)get(board,"gameOver"),"loss fixture did not lose");
-            check(beforeLoss.equals(progress.getAll()),"defeat granted or changed rewards");
-            main(() -> check(hasText(activity.getWindow().getDecorView(),"敗北"),"defeat screen missing"));
-            result.putString("result", "PASS: all waves, coins, EXP, unlock, drops, duplicate guard, replay, defeat");
-            result.putInt("expectedCoins",2*stage.coinReward);
+            for (StageData.Stage fixture : fixtures) {
+                stage=fixture;
+                Map<String,?> beforeLoss=new HashMap<>(progress.getAll());
+                startBattle();
+                PuzzleBoardView board=(PuzzleBoardView)get(activity,"board");
+                main(() -> {
+                    set(board,"playerHp",1);
+                    java.util.Arrays.fill((int[])get(board,"enemyTurnsRemaining"),1);
+                    int[][] cells=(int[][])get(board,"board");
+                    for (int r=0;r<cells.length;r++) for (int c=0;c<cells[r].length;c++) cells[r][c]=(r+c)%5;
+                    touch(board);
+                });
+                waitForIdleSync();
+                check((Boolean)get(board,"gameOver"),"loss fixture did not lose at stage " + stage.id);
+                check(beforeLoss.equals(progress.getAll()),"defeat changed rewards at stage " + stage.id);
+                main(() -> check(hasText(activity.getWindow().getDecorView(),"敗北"),"defeat screen missing"));
+            }
+            check(expectedCoins==1760 && totalExp==1120, "unexpected final reward totals");
+            result.putString("result", "PASS: three stages, all waves, coins, EXP level-up, unlock, drops, duplicate guard, replay, defeat");
+            result.putInt("expectedCoins",expectedCoins);
+            result.putInt("expectedLevel",12);
+            result.putInt("expectedExp",160);
+            Map<String,Integer> expectedLoot=new HashMap<>();
+            for (DropData.Item item:DropData.ITEMS)
+                expectedLoot.put("loot_"+item.id,drops.getOrDefault(item.id,0));
+            result.putString("expectedLoot",new org.json.JSONObject(expectedLoot).toString());
             finish(Activity.RESULT_OK,result);
         } catch (Throwable t) {
             result.putString("result","FAIL: "+t.toString());
@@ -101,7 +133,7 @@ public final class BattleRegression extends Instrumentation {
     private void startBattle() throws Exception {
         main(() -> {
             Method method=MainActivity.class.getDeclaredMethod("showBattle",int.class);
-            method.setAccessible(true); method.invoke(activity,0);
+            method.setAccessible(true); method.invoke(activity,stage.id);
             set(activity,"currentBattleStage",stage);
             PuzzleBoardView board=(PuzzleBoardView)get(activity,"board");
             board.setStage(stage); board.resetGame();
