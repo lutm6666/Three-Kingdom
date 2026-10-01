@@ -3,6 +3,7 @@ The emulator app data is cleared; physical-device serials are refused.
 Usage: python tools/android_smoke.py --serial emulator-5554 --apk path.apk
 """
 import argparse
+import json
 import re
 import subprocess
 import time
@@ -143,6 +144,91 @@ click('隊伍編成')
 find(lambda n: '位置 1' in n.attrib.get('text', '') and '關羽 Lv.99' in n.attrib.get('text', ''))
 assert ints(prefs('progress'))['level_1'] == 150, 'Original save level was overwritten'
 assert ints(prefs('game')) == saved
+
+# Exercise Android's native document picker and the production activity callbacks.
+def native_node(predicate):
+    visible = []
+    for _ in range(12):
+        nodes = list(tree().iter('node'))
+        visible = [dict(n.attrib) for n in nodes]
+        for n in nodes:
+            b = bounds(n)
+            if predicate(n) and len(b) == 4 and b[2] > b[0] and b[3] > b[1]:
+                return n
+        time.sleep(0.25)
+    raise AssertionError('Native picker element missing: ' + repr(visible))
+
+def tap_node(node):
+    x1, y1, x2, y2 = bounds(node)
+    adb('shell', 'input', 'tap', str((x1+x2)//2), str((y1+y2)//2))
+    time.sleep(0.3)
+
+def values(name):
+    result = {}
+    for n in prefs(name):
+        assert n.tag in ('int', 'boolean'), ET.tostring(n, encoding='unicode')
+        result[n.attrib['name']] = (int(n.attrib['value']) if n.tag == 'int'
+                                  else n.attrib['value'] == 'true')
+    return result
+
+def snapshot():
+    return {name: values(name) for name in ('game', 'progress')}
+
+def backup_screen(message):
+    native_node(lambda n: n.attrib.get('text') == message)
+
+def picker():
+    native_node(lambda n: 'documentsui' in n.attrib.get('package', ''))
+
+def select_backup():
+    click('選擇備份還原')
+    picker()
+    tap_node(native_node(lambda n: n.attrib.get('text') == 'ThreeKingdom-save.json'))
+    native_node(lambda n: n.attrib.get('text') == '確認還原存檔')
+
+click('完成編隊／返回首頁')
+original = snapshot()
+click('存檔備份與還原')
+for action in ('匯出存檔', '選擇備份還原'):
+    click(action)
+    picker()
+    adb('shell', 'input', 'keyevent', 'KEYCODE_BACK')
+    backup_screen('已取消，存檔未變更。')
+    assert snapshot() == original, action + ' cancellation changed save'
+
+click('匯出存檔')
+picker()
+# The CREATE_DOCUMENT picker opens its writable default directory (Downloads).
+tap_node(native_node(lambda n: n.attrib.get('enabled') == 'true'
+                     and n.attrib.get('text', '').upper() == 'SAVE'))
+backup_screen('備份已匯出。')
+exported = json.loads(adb('exec-out', 'cat', '/sdcard/Download/ThreeKingdom-save.json'))
+assert exported['schema'] == 'three-kingdom-save' and exported['version'] == 1, exported
+assert {k: exported[k] for k in original} == original, exported
+assert snapshot() == original, 'Export changed save'
+
+# Change the party through the app so restoring must overwrite a different save.
+click('返回首頁')
+click('隊伍編成')
+click('【已上陣】 劉備', prefix=True)
+click('完成編隊／返回首頁')
+changed = snapshot()
+assert changed['game'] != original['game'], 'Fixture did not change party'
+click('存檔備份與還原')
+select_backup()
+click('取消')
+backup_screen('已取消，存檔未變更。')
+assert snapshot() == changed, 'Confirmation cancellation changed save'
+select_backup()
+click('還原')
+backup_screen('存檔已還原。')
+assert snapshot() == original, 'Document restore did not reproduce exported save'
+adb('shell', 'am', 'force-stop', package)
+launch()
+assert snapshot() == original, 'Restored save changed after process restart'
+find(lambda n: n.attrib.get('text', '').startswith('主將：關羽'))
+print('PASS: native document export, picker cancellation, restore cancellation, confirmed restore, restored restart')
+
 logs = adb('logcat', '-d', '-s', 'AndroidRuntime:E', 'MasterData:E')
 assert 'FATAL EXCEPTION' not in logs and 'MasterData' not in logs, logs
 print('PASS: launch, canonical load, team swap, battle drag, process restart, saved team, level cap')
