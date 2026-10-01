@@ -19,6 +19,9 @@ for name, marker in reports.items():
     report = (root / name).read_text()
     if marker not in report or 'INSTRUMENTATION_CODE: -1' not in report:
         raise RuntimeError('Missing passing report: ' + name)
+ui_report = root / 'ui-save-result.txt'
+if 'PASS: native document export, picker cancellation, restore cancellation, confirmed restore, restored restart' not in ui_report.read_text():
+    raise RuntimeError('Missing passing native document picker report')
 apk = root / 'app/build/outputs/apk/debug/app-debug.apk'
 with zipfile.ZipFile(apk) as package:
     if 'classes.dex' not in package.namelist():
@@ -35,6 +38,7 @@ filename = 'ThreeKingdom-' + version + '-debug.apk'
 shutil.copyfile(apk, output / filename)
 digest = hashlib.sha256(apk.read_bytes()).hexdigest()
 (output / 'SHA256SUMS').write_text(digest + '  ' + filename + '\n')
+shutil.copyfile(ui_report, output / ui_report.name)
 for name in reports:
     shutil.copyfile(root / name, output / name)
 metadata = {
@@ -49,7 +53,7 @@ metadata = {
     'min_android_api': 23,
     'tested_emulator_api': 35,
     'artwork_identities_verified': 0,
-    'reports': list(reports),
+    'reports': list(reports) + [ui_report.name],
 }
 (output / 'build-info.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + '\n')
 (output / 'README.txt').write_text(

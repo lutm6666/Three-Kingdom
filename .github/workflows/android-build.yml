@@ -80,7 +80,8 @@ jobs:
           emulator-boot-timeout: 300
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: |
-            python tools/android_smoke.py --serial emulator-5554 --apk app/build/outputs/apk/debug/app-debug.apk
+            python tools/android_smoke.py --serial emulator-5554 --apk app/build/outputs/apk/debug/app-debug.apk > ui-save-result.txt
+            cat ui-save-result.txt
             adb -s emulator-5554 install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
             adb -s emulator-5554 shell am instrument -w com.openai.threekingdoms.test/com.openai.threekingdoms.test.BattleRegression > battle-test-result.txt
             cat battle-test-result.txt
