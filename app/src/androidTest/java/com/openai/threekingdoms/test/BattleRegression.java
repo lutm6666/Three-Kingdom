@@ -26,8 +26,10 @@ public final class BattleRegression extends Instrumentation {
 
     private boolean probe;
     private boolean skills;
-    @Override public void onCreate(Bundle arguments) { super.onCreate(arguments); probe=arguments != null && "playability".equals(arguments.getString("suite")); skills=arguments != null && "skills".equals(arguments.getString("suite")); start(); }
+    private boolean saves;
+    @Override public void onCreate(Bundle arguments) { super.onCreate(arguments); probe=arguments != null && "playability".equals(arguments.getString("suite")); skills=arguments != null && "skills".equals(arguments.getString("suite")); saves=arguments != null && "saves".equals(arguments.getString("suite")); start(); }
     @Override public void onStart() {
+        if (saves) { new SaveRegression(this).run(); return; }
         if (skills) { new SkillRegression(this).run(); return; }
         if (probe) { new PlayabilityProbe(this).run(); return; }
         Bundle result = new Bundle();

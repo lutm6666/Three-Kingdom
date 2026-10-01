@@ -97,6 +97,10 @@ jobs:
             cat skill-result.txt
             grep -q 'PASS: heal, delay, conversion, free move, damage, ignore defense, AoE, cooldown, seal, timeout, reset' skill-result.txt
             grep -q 'INSTRUMENTATION_CODE: -1' skill-result.txt
+            adb -s emulator-5554 shell am instrument -w -e suite saves com.openai.threekingdoms.test/com.openai.threekingdoms.test.BattleRegression > save-result.txt
+            cat save-result.txt
+            grep -q 'PASS: save round-trip, ownership, equipment, loot, legacy level, invalid import unchanged, restored startup' save-result.txt
+            grep -q 'INSTRUMENTATION_CODE: -1' save-result.txt
       - name: Package tested APK and reports
         env:
           SOURCE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
