@@ -10,6 +10,7 @@ import zipfile
 
 root = Path(__file__).resolve().parent.parent
 reports = {
+    'save-result.txt': 'PASS: save round-trip, ownership, equipment, loot, legacy level, invalid import unchanged, restored startup',
     'battle-test-result.txt': 'PASS: three stages, all waves, coins, EXP level-up, unlock, drops, duplicate guard, replay, defeat',
     'playability-result.txt': 'PASS: natural-board diagnostic completed',
     'skill-result.txt': 'PASS: heal, delay, conversion, free move, damage, ignore defense, AoE, cooldown, seal, timeout, reset',
@@ -57,7 +58,7 @@ metadata = {
     'This is a development build, not a store release or original game APK.\n'
     'SHA256SUMS identifies the exact APK used in this CI run.\n'
     'build-info.json records the source, checkout and test run.\n'
-    'Included reports cover three-stage rewards, natural-board diagnostics and skills.\n'
+    'Included reports cover rewards, natural-board diagnostics, skills and save backup.\n'
     'Human difficulty/playability and physical devices have not been validated.\n'
     'No original commercial artwork is included.\n'
     'Debug signing keys may differ between CI runs; Android may reject replacing an older install.\n'

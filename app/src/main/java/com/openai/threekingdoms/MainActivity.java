@@ -32,6 +32,8 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
     private StageData.Stage currentBattleStage;
     private boolean battleRewardGranted = false;
     private String enhancementMessage = "";
+    private static final int EXPORT_SAVE=7101,IMPORT_SAVE=7102;
+    private String backupMessage="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,9 +247,65 @@ public class MainActivity extends Activity implements PuzzleBoardView.BattleList
         return total;
     }
 
+    private void showSaveBackup() {
+        prepareRoot();addTitle("存檔備份與還原", "隊伍、武將養成、裝備與掉落");
+        root.addView(text("匯出可保存目前進度；還原會取代目前存檔。",16f,Color.WHITE));
+        if(!backupMessage.isEmpty())root.addView(text(backupMessage,15f,Color.rgb(160,220,255)));
+        root.addView(button("匯出存檔",v -> {
+            android.content.Intent intent=new android.content.Intent(android.content.Intent.ACTION_CREATE_DOCUMENT);
+            intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);intent.setType("application/json");
+            intent.putExtra(android.content.Intent.EXTRA_TITLE,"ThreeKingdom-save.json");startActivityForResult(intent,EXPORT_SAVE);
+        }));
+        root.addView(button("選擇備份還原",v -> {
+            android.content.Intent intent=new android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);intent.setType("application/json");startActivityForResult(intent,IMPORT_SAVE);
+        }));
+        root.addView(button("返回首頁",v -> showHome()));
+    }
+
+    @Override protected void onActivityResult(int request,int result,android.content.Intent data) {
+        super.onActivityResult(request,result,data);
+        if(request!=EXPORT_SAVE && request!=IMPORT_SAVE)return;
+        if(result!=RESULT_OK || data==null || data.getData()==null) {
+            backupMessage="已取消，存檔未變更。";showSaveBackup();return;
+        }
+        try {
+            if(request==EXPORT_SAVE) {
+                String json=SaveBackup.export(this);
+                try(java.io.OutputStream out=getContentResolver().openOutputStream(data.getData(),"wt")) {
+                    if(out==null)throw new java.io.IOException("無法開啟檔案");
+                    out.write(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                }
+                backupMessage="備份已匯出。";showSaveBackup();
+            } else {
+                String json;
+                try(java.io.InputStream in=getContentResolver().openInputStream(data.getData());
+                    java.io.ByteArrayOutputStream out=new java.io.ByteArrayOutputStream()) {
+                    if(in==null)throw new java.io.IOException("無法讀取檔案");
+                    byte[] buffer=new byte[4096];int count;
+                    while((count=in.read(buffer))!=-1) {
+                        if(out.size()+count>SaveBackup.MAX_BYTES)throw new java.io.IOException("備份檔過大");
+                        out.write(buffer,0,count);
+                    }
+                    json=new String(out.toByteArray(),java.nio.charset.StandardCharsets.UTF_8);
+                }
+                SaveBackup.Snapshot snapshot=SaveBackup.parse(json);
+                new android.app.AlertDialog.Builder(this).setTitle("確認還原存檔")
+                    .setMessage(snapshot.summary()).setNegativeButton("取消",(dialog,which)->{
+                        backupMessage="已取消，存檔未變更。";showSaveBackup();
+                    }).setPositiveButton("還原",(dialog,which)->{
+                        try {SaveBackup.restore(this,snapshot);loadTeam();backupMessage="存檔已還原。";}
+                        catch(Exception error){backupMessage="還原失敗："+error.getMessage();}
+                        showSaveBackup();
+                    }).show();
+            }
+        } catch(Exception error) {backupMessage="備份操作失敗："+error.getMessage();showSaveBackup();}
+    }
+
     private void showHome() {
         prepareRoot();
-        addTitle("三國志拼圖大戰重建", "v2.5 重建 Master 資料核心");
+        root.addView(button("存檔備份與還原",v -> showSaveBackup()));
+        addTitle("三國志拼圖大戰重建", "v2.5.1 重建 Master 資料核心");
 
         boolean hasOriginalArt = addOptionalArt(
                 OriginalArtData.BACKGROUND_RESOURCE,

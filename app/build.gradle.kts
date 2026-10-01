@@ -10,8 +10,8 @@ android {
         applicationId = "com.openai.threekingdoms"
         minSdk = 23
         targetSdk = 37
-        versionCode = 26
-        versionName = "2.5.0"
+        versionCode = 27
+        versionName = "2.5.1"
         testInstrumentationRunner = "com.openai.threekingdoms.test.BattleRegression"
     }
 }
